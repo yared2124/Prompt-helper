@@ -123,7 +123,12 @@ Respond with a JSON object in this exact format (no surrounding markdown, no ext
 }`;
 
     const ai = getAIClient();
-    const candidateModels = ["gemini-3.7-flash", "gemini-3.6-flash", "gemini-2.5-flash"];
+    const candidateModels = [
+      "gemini-3.7-flash",
+      "gemini-3.6-flash",
+      "gemini-3-flash-preview",
+      "gemini-3.5-flash-lite",
+    ];
     let rawText = "";
     let lastErr: unknown = null;
 
@@ -138,13 +143,14 @@ Respond with a JSON object in this exact format (no surrounding markdown, no ext
               maxOutputTokens: 1500,
             },
           }),
-          18000
+          25000
         );
         rawText = response.text ?? "";
         if (rawText) break; // success
       } catch (err) {
         lastErr = err;
-        console.warn(`Model ${modelName} failed or busy, trying fallback...`);
+        const errMsg = err instanceof Error ? err.message : String(err);
+        console.warn(`Model ${modelName} encountered issue: ${errMsg}. Trying fallback...`);
       }
     }
 
@@ -189,7 +195,13 @@ Respond with a JSON object in this exact format (no surrounding markdown, no ext
 
     return NextResponse.json(result);
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    let message = error instanceof Error ? error.message : String(error);
+    try {
+      const parsedJson = JSON.parse(message);
+      if (parsedJson?.error?.message) {
+        message = parsedJson.error.message;
+      }
+    } catch {}
     console.error("Error generating prompt:", message);
     return NextResponse.json(
       { error: message },
