@@ -14,7 +14,7 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         {/* Brand and Subtitle */}
         <div>
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <span className="font-black text-lg sm:text-xl tracking-tight text-[#121E1B] dark:text-white">
               prompt Helper
             </span>
@@ -22,7 +22,7 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
               <span className="w-1.5 h-1.5 rounded-full bg-[#1B4D3E] dark:bg-emerald-400 animate-pulse" />
               Gemini 3.7 Flash
             </span>
-          </div>
+          </div> */}
             <span className="text-[10px] sm:text-[11px] text-[#121E1B] dark:text-slate-300 block leading-tight font-medium">
               AI-Native Prompt Architect built by{" "}
               <a
