@@ -166,11 +166,11 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen relative transition-colors duration-300 selection:bg-indigo-500/30">
-      {/* Background Animated Nebulae */}
-      <div className="bg-orb w-96 h-96 bg-violet-600 top-[-100px] left-[-100px]" />
-      <div className="bg-orb w-80 h-80 bg-indigo-600 top-[35%] right-[-80px]" />
-      <div className="bg-orb w-72 h-72 bg-cyan-600 bottom-[10%] left-[15%]" />
+    <div className="min-h-screen relative bg-warm-grid transition-colors duration-300 selection:bg-amber-500/20 dark:selection:bg-indigo-500/30">
+      {/* Background Solar Orb in Light Mode / Nebulae in Dark Mode */}
+      <div className="bg-orb w-[420px] h-[420px] bg-amber-300/60 dark:bg-violet-600 top-[-80px] left-[-80px]" />
+      <div className="bg-orb w-80 h-80 bg-orange-200/50 dark:bg-indigo-600 top-[35%] right-[-80px]" />
+      <div className="bg-orb w-72 h-72 bg-emerald-100/40 dark:bg-cyan-600 bottom-[10%] left-[15%]" />
 
       {/* Global Header */}
       <Header
@@ -179,25 +179,29 @@ export default function Home() {
       />
 
       <main className="relative z-10 max-w-5xl mx-auto px-4 py-8 space-y-10">
-        {/* Hero Section */}
+        {/* Hero Section - Warm Editorial Design (Inspired by KeyCodes) */}
         <section className="text-center py-6 sm:py-10 space-y-5">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-card border border-indigo-500/20 shadow-sm text-xs font-semibold text-slate-700 dark:text-slate-300">
-            <Flame size={14} className="text-amber-500 animate-pulse" />
-            <span>Built with Next.js 14, TypeScript & Gemini 3.7 Flash</span>
+          {/* Eyebrow badge matching the image */}
+          <div className="inline-flex items-center justify-center gap-2">
+            <span className="w-5 h-[2px] bg-[#C2671A] dark:bg-violet-400" />
+            <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#C2671A] dark:text-violet-400">
+              AI Prompting
+            </span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
-            Architect Perfect <br className="hidden sm:inline" />
-            <span className="gradient-text">AI Prompts</span> with Zero Fluff
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif font-bold tracking-tight text-[#121E1B] dark:text-white leading-[1.12]">
+            Architect prompts <br className="hidden sm:inline" />
+            <span className="italic font-normal font-serif">under</span>{" "}
+            <span className="text-[#1A5343] dark:gradient-text">real constraints.</span>
           </h1>
 
-          <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-            Stop wasting tokens with casual, ambiguous prompts. Tell PromptCraft what you want in plain words — we transform it into an optimized, model-specific prompt tailored for Claude, ChatGPT, Gemini, and DeepSeek.
+          <p className="text-[#4A5552] dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+            Stop wasting tokens with casual, ambiguous prompts. Tell promptHelper what you want in plain words — we transform it into an optimized, model-specific prompt tailored for Claude, ChatGPT, Gemini, and DeepSeek.
           </p>
 
           {/* Interactive 1-Click Demo Presets Bar */}
-          <div className="pt-2 space-y-2">
-            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center justify-center gap-1.5">
+          <div className="pt-2 space-y-2.5">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-[#75827E] dark:text-slate-500 flex items-center justify-center gap-1.5">
               <Zap size={13} className="text-amber-500" />
               <span>Try 1-Click Interactive Showcase Presets:</span>
             </div>
@@ -207,15 +211,15 @@ export default function Home() {
                   key={preset.label}
                   type="button"
                   onClick={() => applyPreset(preset)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-card glass-card-hover border border-slate-200 dark:border-white/10 text-xs font-medium text-slate-700 dark:text-slate-200 shadow-sm transition-all group"
+                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white dark:bg-white/[0.03] border border-[#E6E1D7] dark:border-white/10 hover:border-[#121E1B]/40 dark:hover:border-white/20 text-xs font-semibold text-[#14201D] dark:text-slate-200 shadow-[0_2px_8px_-2px_rgba(20,30,25,0.04)] hover:shadow-md transition-all group"
                 >
                   <IconRenderer
                     name={preset.iconName}
                     size={13}
-                    className="text-indigo-600 dark:text-violet-400 group-hover:scale-110 transition-transform"
+                    className="text-[#1A5343] dark:text-violet-400 group-hover:scale-110 transition-transform"
                   />
                   <span>{preset.label}</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-violet-950/60 text-indigo-700 dark:text-violet-300 font-mono font-semibold">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#F4EFE6] dark:bg-violet-950/60 text-[#14201D] dark:text-violet-300 font-mono font-semibold">
                     {preset.badge}
                   </span>
                 </button>
@@ -233,12 +237,12 @@ export default function Home() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="p-2.5 rounded-xl glass-card border border-slate-200/60 dark:border-white/5 text-center"
+                className="p-3 rounded-xl bg-white/80 dark:bg-white/[0.02] border border-[#E7E2D8] dark:border-white/5 text-center shadow-[0_2px_10px_-2px_rgba(20,30,25,0.03)]"
               >
-                <div className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                <div className="text-sm sm:text-base font-bold text-[#121E1B] dark:text-white">
                   {stat.value}
                 </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                <div className="text-[10px] text-[#717E7A] dark:text-slate-400">
                   {stat.label}
                 </div>
               </div>
@@ -358,15 +362,12 @@ export default function Home() {
         )}
 
         {/* Footer */}
-        <footer className="text-center py-8 border-t border-slate-200 dark:border-white/10 space-y-2">
+        <footer className="text-center py-8 border-t border-slate-200 dark:border-white/10">
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            PromptCraft · Production Portfolio Showcase · Built with{" "}
+            promptHelper · Production Portfolio Showcase · Built with{" "}
             <span className="font-semibold text-slate-800 dark:text-slate-200">
               Next.js 14, TypeScript & Tailwind CSS
             </span>
-          </p>
-          <p className="text-[11px] text-slate-400 dark:text-slate-600">
-            Powered by Google Gemini 3.7 Flash API · Local-first storage guarantees 100% client privacy
           </p>
         </footer>
       </main>

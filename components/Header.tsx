@@ -1,6 +1,6 @@
 "use client";
 
-import { BookmarkCheck, Sparkles, Github, ExternalLink } from "lucide-react";
+import { BookmarkCheck, Sparkles, Github } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 interface HeaderProps {
@@ -10,24 +10,24 @@ interface HeaderProps {
 
 export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-40 glass-card border-b border-slate-200/80 dark:border-white/8 backdrop-blur-md">
+    <header className="sticky top-0 z-40 bg-[#FAF7F2]/90 dark:bg-[#05060f]/90 border-b border-[#E7E2D8] dark:border-white/8 backdrop-blur-md transition-colors">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         {/* Logo and Status */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 via-indigo-600 to-cyan-500 flex items-center justify-center shadow-md shadow-indigo-500/25">
-            <Sparkles size={18} className="text-white" />
+          <div className="w-9 h-9 rounded-xl bg-[#121E1B] dark:bg-gradient-to-tr dark:from-violet-600 dark:via-indigo-600 dark:to-cyan-500 flex items-center justify-center shadow-md shadow-black/10 dark:shadow-indigo-500/25 text-white">
+            <Sparkles size={17} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-base tracking-tight text-slate-900 dark:text-white">
+              <span className="font-bold text-base tracking-tight text-[#121E1B] dark:text-white">
                 PromptHelper
               </span>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EAF2ED] dark:bg-emerald-500/20 text-[#1B4D3E] dark:text-emerald-400 border border-[#CEE0D5] dark:border-emerald-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1B4D3E] dark:bg-emerald-400 animate-pulse" />
                 Gemini 3.7 Flash
               </span>
             </div>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 block leading-tight">
+            <span className="text-[11px] text-[#717E7A] dark:text-slate-400 block leading-tight">
               AI-Native Prompt Architect
             </span>
           </div>
@@ -41,30 +41,31 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
           {/* Library Button */}
           <button
             onClick={onOpenLibrary}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl glass-card glass-card-hover border border-slate-200/80 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white dark:bg-white/5 border border-[#E6E1D7] dark:border-white/10 hover:border-[#121E1B]/30 dark:hover:border-white/20 text-xs font-semibold text-[#14201D] dark:text-slate-200 transition-all shadow-[0_1px_4px_rgba(20,30,25,0.03)]"
             title="Open Saved Prompts Library"
           >
             <BookmarkCheck
-              size={16}
-              className="text-indigo-600 dark:text-violet-400"
+              size={15}
+              className="text-[#1B4D3E] dark:text-violet-400"
             />
             <span className="hidden sm:inline">Library</span>
             {savedCount > 0 && (
-              <span className="bg-indigo-600 dark:bg-violet-600 text-white text-[10px] font-bold rounded-full min-w-5 h-5 px-1 flex items-center justify-center">
+              <span className="bg-[#121E1B] dark:bg-violet-600 text-white text-[10px] font-bold rounded-full min-w-5 h-5 px-1 flex items-center justify-center">
                 {savedCount > 99 ? "99+" : savedCount}
               </span>
             )}
           </button>
 
-          {/* GitHub / Showcase link */}
+          {/* GitHub / Showcase link styled like the "Continue with GitHub" pill in the image */}
           <a
             href="https://github.com/yared2124/Prompt-helper"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-xl glass-card glass-card-hover border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#121E1B] dark:bg-white/10 hover:bg-[#1E332E] dark:hover:bg-white/20 text-white text-xs font-semibold shadow-sm transition-all"
             title="View on GitHub"
           >
-            <Github size={18} />
+            <Github size={15} />
+            <span className="hidden md:inline">GitHub</span>
           </a>
         </div>
       </div>
