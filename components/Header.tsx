@@ -44,7 +44,10 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
             className="flex items-center gap-2 px-3 py-2 rounded-xl glass-card glass-card-hover border border-slate-200/80 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all"
             title="Open Saved Prompts Library"
           >
-            <BookmarkCheck size={16} className="text-indigo-600 dark:text-violet-400" />
+            <BookmarkCheck
+              size={16}
+              className="text-indigo-600 dark:text-violet-400"
+            />
             <span className="hidden sm:inline">Library</span>
             {savedCount > 0 && (
               <span className="bg-indigo-600 dark:bg-violet-600 text-white text-[10px] font-bold rounded-full min-w-5 h-5 px-1 flex items-center justify-center">
@@ -55,7 +58,7 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
 
           {/* GitHub / Showcase link */}
           <a
-            href="https://github.com"
+            href="https://github.com/yared2124/Prompt-helper"
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 rounded-xl glass-card glass-card-hover border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
