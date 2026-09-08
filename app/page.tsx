@@ -122,6 +122,8 @@ export default function Home() {
       text: "Implement a production-grade Binary Search Tree in Python 3.10 with full typing, delete/traversal operations, docstrings with Big-O complexity, and pytest tests.",
       badge: "Claude 3.7",
       iconName: "Code2",
+      iconColor: "dark:text-amber-400",
+      badgeColor: "dark:bg-amber-500/20 dark:text-amber-300",
     },
     {
       label: "Next.js 14 JWT Auth",
@@ -131,6 +133,8 @@ export default function Home() {
       text: "Design a secure JWT authentication middleware in Next.js 14 App Router with HTTP-only refresh cookies, error boundaries, and rate limiting.",
       badge: "GPT-4o",
       iconName: "ShieldCheck",
+      iconColor: "dark:text-emerald-400",
+      badgeColor: "dark:bg-emerald-500/20 dark:text-emerald-300",
     },
     {
       label: "Quantum Computing for 10yo",
@@ -140,6 +144,8 @@ export default function Home() {
       text: "Explain how quantum superposition and entanglement work using the coin-flip and magical dice analogies for a 10-year-old child.",
       badge: "Gemini 3.7",
       iconName: "Atom",
+      iconColor: "dark:text-blue-400",
+      badgeColor: "dark:bg-blue-500/20 dark:text-blue-300",
     },
     {
       label: "Fast DP LeetCode Hard",
@@ -149,6 +155,8 @@ export default function Home() {
       text: "Solve the Traveling Salesperson Problem with bitmask dynamic programming in C++. Provide rigorous recurrence relation and space-optimized implementation.",
       badge: "DeepSeek R1",
       iconName: "Terminal",
+      iconColor: "dark:text-cyan-400",
+      badgeColor: "dark:bg-cyan-500/20 dark:text-cyan-300",
     },
   ];
 
@@ -196,7 +204,7 @@ export default function Home() {
           </h1>
 
           <p className="italic text-[#4A5552] dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-            Stop wasting tokens with casual, ambiguous prompts. Tell promptHelper what you want in plain words — we transform it into an optimized, model-specific prompt tailored for Claude, ChatGPT, Gemini, and DeepSeek.
+            Stop wasting tokens with casual, ambiguous prompts. Tell promptHelper what you want in plain words. we transform it into an optimized, model-specific prompt tailored for Claude, ChatGPT, Gemini and DeepSeek.
           </p>
 
           {/* Interactive 1-Click Demo Presets Bar */}
@@ -216,10 +224,10 @@ export default function Home() {
                   <IconRenderer
                     name={preset.iconName}
                     size={13}
-                    className="text-[#1A5343] dark:text-violet-400 group-hover:scale-110 transition-transform"
+                    className={`text-[#1A5343] ${preset.iconColor} group-hover:scale-110 transition-transform`}
                   />
                   <span>{preset.label}</span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#F4EFE6] dark:bg-violet-950/60 text-[#14201D] dark:text-violet-300 font-mono font-semibold">
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded bg-[#F4EFE6] text-[#14201D] ${preset.badgeColor} font-mono font-semibold`}>
                     {preset.badge}
                   </span>
                 </button>
@@ -366,7 +374,7 @@ export default function Home() {
           <p className="text-xs text-slate-500 dark:text-slate-400">
             promptHelper · Production Portfolio Showcase · Built with{" "}
             <span className="font-semibold text-slate-800 dark:text-slate-200">
-              Next.js 14, TypeScript & Tailwind CSS
+              Next.js , TypeScript & Tailwind CSS
             </span>
           </p>
         </footer>

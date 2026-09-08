@@ -106,11 +106,11 @@ export default function PromptLibrary({
         {/* Header */}
         <div className="px-5 py-4 border-b border-[#E7E2D8] dark:border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <BookmarkCheck size={20} className="text-[#121E1B] dark:text-violet-400" />
+            <BookmarkCheck size={20} className="text-[#121E1B] dark:text-emerald-400" />
             <h3 className="font-bold text-base text-[#121E1B] dark:text-white font-serif">
               Prompt Library
             </h3>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-[#EFECE4] dark:bg-white/10 font-mono text-[#121E1B] dark:text-slate-300 font-semibold">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-[#EFECE4] dark:bg-emerald-500/20 font-mono text-[#121E1B] dark:text-emerald-300 font-semibold">
               {prompts.length}
             </span>
           </div>
@@ -244,16 +244,16 @@ export default function PromptLibrary({
                       onClick={() => handleCopy(p)}
                       className={`flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg font-medium transition-all ${
                         copiedId === p.id
-                          ? "bg-[#121E1B] text-white"
-                          : "bg-[#F4EFE6] dark:bg-white/10 text-[#14201D] dark:text-slate-200 hover:bg-[#EAE4D8] dark:hover:bg-white/20"
+                          ? "bg-[#121E1B] text-white dark:bg-emerald-600 dark:text-white"
+                          : "bg-[#F4EFE6] dark:bg-white/10 text-[#14201D] dark:text-slate-200 hover:bg-[#EAE4D8] dark:hover:bg-emerald-500/20 dark:hover:text-emerald-300"
                       }`}
                     >
-                      <Copy size={12} />
+                      <Copy size={12} className="text-[#14201D] dark:text-emerald-400" />
                       <span>{copiedId === p.id ? "Copied!" : "Copy"}</span>
                     </button>
                     <button
                       onClick={() => onLoad(p)}
-                      className="text-xs px-2.5 py-1.5 rounded-lg font-medium bg-[#121E1B] text-white hover:bg-[#1E332E] transition-colors"
+                      className="text-xs px-2.5 py-1.5 rounded-lg font-medium bg-[#121E1B] text-white hover:bg-[#1E332E] dark:bg-white/10 dark:hover:bg-white/20 transition-colors"
                     >
                       Load into Editor
                     </button>
@@ -261,8 +261,9 @@ export default function PromptLibrary({
 
                   <button
                     onClick={() => onDelete(p.id)}
-                    className="p-1.5 rounded-lg text-[#879692] hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
+                    className="p-1.5 rounded-lg text-[#879692] hover:text-rose-600 hover:bg-rose-50 dark:text-rose-400/80 dark:hover:text-rose-300 dark:hover:bg-rose-950/40 transition-colors"
                     title="Delete prompt"
+                    aria-label="Delete prompt from library"
                   >
                     <Trash2 size={14} />
                   </button>

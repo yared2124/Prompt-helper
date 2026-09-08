@@ -46,11 +46,11 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
           >
             <BookmarkCheck
               size={15}
-              className="text-[#1B4D3E] dark:text-violet-400"
+              className="text-[#1B4D3E] dark:text-emerald-400"
             />
             <span className="hidden sm:inline">Library</span>
             {savedCount > 0 && (
-              <span className="bg-[#121E1B] dark:bg-violet-600 text-white text-[10px] font-bold rounded-full min-w-5 h-5 px-1 flex items-center justify-center">
+              <span className="bg-[#121E1B] dark:bg-emerald-500 text-white text-[10px] font-bold rounded-full min-w-5 h-5 px-1 flex items-center justify-center shadow-sm dark:shadow-[0_0_8px_rgba(16,185,129,0.4)]">
                 {savedCount > 99 ? "99+" : savedCount}
               </span>
             )}

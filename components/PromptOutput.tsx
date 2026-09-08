@@ -219,8 +219,9 @@ export default function PromptOutput({
               <button
                 type="button"
                 onClick={handleLaunchInAI}
-                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#121E1B] hover:bg-[#1E332E] text-white font-semibold transition-all shadow-sm"
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#121E1B] hover:bg-[#1E332E] text-white font-semibold transition-all shadow-sm dark:bg-gradient-to-r dark:from-violet-600 dark:to-indigo-600 dark:hover:from-violet-500 dark:hover:to-indigo-500 dark:shadow-[0_0_14px_rgba(124,58,237,0.35)]"
                 title={`Copy and open directly in ${selectedAI.name}`}
+                aria-label={`Copy and open prompt in ${selectedAI.name}`}
               >
                 <span>Open in {selectedAI.name}</span>
                 <ExternalLink size={12} />
@@ -231,20 +232,21 @@ export default function PromptOutput({
             <button
               type="button"
               onClick={handleCopy}
+              aria-label="Copy optimized prompt"
               className={`flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg font-semibold border transition-all ${
                 copied
-                  ? "bg-[#EBF5EE] text-[#1B4D3E] border-[#BFDEC7]"
-                  : "bg-white dark:bg-white/5 text-[#14201D] dark:text-slate-200 border-[#E7E2D8] dark:border-white/10 hover:bg-[#F5F2EA] dark:hover:bg-white/10"
+                  ? "bg-[#EBF5EE] text-[#1B4D3E] border-[#BFDEC7] dark:bg-emerald-500/20 dark:text-emerald-300 dark:border-emerald-500/40"
+                  : "bg-white dark:bg-white/5 text-[#14201D] dark:text-slate-200 border-[#E7E2D8] dark:border-white/10 hover:bg-[#F5F2EA] dark:hover:bg-emerald-500/10 dark:hover:text-emerald-400 dark:hover:border-emerald-500/30"
               }`}
             >
               {copied ? (
                 <>
-                  <Check size={12} />
+                  <Check size={12} className="text-emerald-600 dark:text-emerald-400" />
                   <span>Copied!</span>
                 </>
               ) : (
                 <>
-                  <Copy size={12} />
+                  <Copy size={12} className="text-[#14201D] dark:text-emerald-400" />
                   <span>Copy</span>
                 </>
               )}
@@ -254,8 +256,9 @@ export default function PromptOutput({
             <button
               type="button"
               onClick={onSave}
-              className="p-1.5 rounded-lg bg-white dark:bg-white/5 text-[#485450] dark:text-slate-300 hover:text-[#121E1B] dark:hover:text-violet-400 border border-[#E7E2D8] dark:border-white/10 hover:bg-[#F5F2EA] transition-colors"
+              className="p-1.5 rounded-lg bg-white dark:bg-white/5 text-[#485450] dark:text-amber-400 hover:text-[#121E1B] border border-[#E7E2D8] dark:border-white/10 hover:bg-[#F5F2EA] dark:hover:bg-amber-500/15 dark:hover:border-amber-500/30 transition-colors"
               title="Save to Library"
+              aria-label="Save prompt to library"
             >
               <BookmarkPlus size={15} />
             </button>
@@ -264,8 +267,9 @@ export default function PromptOutput({
             <button
               type="button"
               onClick={handleExportMarkdown}
-              className="p-1.5 rounded-lg bg-white dark:bg-white/5 text-[#485450] dark:text-slate-300 hover:text-[#121E1B] dark:hover:text-violet-400 border border-[#E7E2D8] dark:border-white/10 hover:bg-[#F5F2EA] transition-colors"
+              className="p-1.5 rounded-lg bg-white dark:bg-white/5 text-[#485450] dark:text-sky-400 hover:text-[#121E1B] border border-[#E7E2D8] dark:border-white/10 hover:bg-[#F5F2EA] dark:hover:bg-sky-500/15 dark:hover:border-sky-500/30 transition-colors"
               title="Export as Markdown (.md)"
+              aria-label="Export prompt as Markdown file"
             >
               <Download size={15} />
             </button>
@@ -274,8 +278,9 @@ export default function PromptOutput({
             <button
               type="button"
               onClick={onRegenerate}
-              className="p-1.5 rounded-lg bg-white dark:bg-white/5 text-[#485450] dark:text-slate-300 hover:text-[#121E1B] dark:hover:text-violet-400 border border-[#E7E2D8] dark:border-white/10 hover:bg-[#F5F2EA] transition-colors"
+              className="p-1.5 rounded-lg bg-white dark:bg-white/5 text-[#485450] dark:text-purple-400 hover:text-[#121E1B] border border-[#E7E2D8] dark:border-white/10 hover:bg-[#F5F2EA] dark:hover:bg-purple-500/15 dark:hover:border-purple-500/30 transition-colors"
               title="Regenerate with alternative wording"
+              aria-label="Regenerate prompt"
             >
               <RefreshCw size={15} />
             </button>

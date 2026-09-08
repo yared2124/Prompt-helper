@@ -55,7 +55,7 @@ export default function PromptInput({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2 font-serif">
-            <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-violet-600 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
+            <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-gradient-to-tr dark:from-indigo-600 dark:to-violet-500 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
               3
             </span>
             Your Request / Goal
@@ -102,8 +102,8 @@ export default function PromptInput({
             <span className="hidden sm:inline text-[#C4CFCB] dark:text-slate-600">
               •
             </span>
-            <span className="hidden sm:inline flex items-center gap-1 font-mono text-[#44524E] dark:text-slate-400 font-medium">
-              <Zap size={11} className="text-amber-500" /> ~{estimatedTokens} input tokens
+            <span className="hidden sm:inline flex items-center gap-1 font-mono text-[#44524E] dark:text-slate-300 font-medium">
+              <Zap size={11} className="text-amber-500 dark:text-amber-400" /> ~{estimatedTokens} input tokens
             </span>
           </div>
 
