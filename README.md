@@ -1,78 +1,133 @@
-# promptHelper — AI Prompt Helper
+# ⚡ promptHelper — AI-Native Prompt Architect
 
-A beautiful, dark-themed web app that helps you craft perfect, token-efficient prompts for any AI model.
+<p align="center">
+  <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-14.2-black?logo=next.js" alt="Next.js"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript" alt="TypeScript"></a>
+  <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css" alt="Tailwind CSS"></a>
+  <a href="https://ai.google.dev/"><img src="https://img.shields.io/badge/Powered%20By-Gemini%203.7%20Flash-4285F4?logo=google" alt="Gemini"></a>
+  <a href="https://jestjs.io/"><img src="https://img.shields.io/badge/Tests-79%20Passed-brightgreen?logo=jest" alt="Jest Tests"></a>
+</p>
 
-## Features
+<p align="center">
+  <strong>Stop wasting tokens with casual, ambiguous prompts.</strong><br>
+  Tell <em>promptHelper</em> what you want in plain words — we transform it into an optimized, model-specific prompt tailored for Claude, ChatGPT, Gemini, DeepSeek, and more.
+</p>
 
-- 🎯 **10 AI Models** — Claude, ChatGPT, Gemini, Grok, Mistral, LLaMA, Perplexity, Cohere, DeepSeek, Qwen
-- 📂 **12 Domains** — Coding, Education, Writing, Research, Business, Art, Data, AI, Health, Language, Legal, Productivity
-- ✨ **AI-Powered** — Uses Gemini 2.5 Flash to generate optimized prompts
-- 💾 **Browser Library** — Save and manage your prompts (localStorage)
-- 📊 **Token Counter** — See before/after token estimates
-- 💡 **Expert Tips** — Contextual tips per AI + domain combo
-- 🎨 **Glassmorphism UI** — Beautiful dark theme with animated backgrounds
+---
 
-## Setup
+## 🌟 Why promptHelper?
 
-### 1. Install dependencies
+Different foundation models adhere to fundamentally different prompting idioms:
+- **Claude** adheres with extreme fidelity to semantic XML structures (`<context>`, `<instructions>`, `<requirements>`).
+- **ChatGPT / OpenAI** thrives on Markdown headings, role definitions, and strict JSON schemas.
+- **DeepSeek** excels when rigorous chain-of-thought and mathematical/algorithmic logic are enforced.
+- **Gemini** leverages multi-turn contextual reasoning, data tables, and structured guidelines.
+
+**promptHelper bridges this gap automatically.**
+
+---
+
+## 🚀 Key Features
+
+- 🎯 **10 AI Foundation Models**: Claude 3.7 Sonnet, ChatGPT (GPT-4o), Gemini 3.7 Flash, DeepSeek-R1, Grok-2, Mistral Large, LLaMA 3.3, Perplexity, Cohere Command R+, and Qwen 2.5.
+- 📂 **12 Specialized Domains**: Coding & Dev, Education, Creative Writing, Research & Analysis, Business, Art & Design, Data & Analytics, AI & Automation, Health, Language, Legal, and Productivity.
+- 🧠 **4 Prompting Strategies**:
+  - **Standard Smart**: Balanced clarity, role definition, and output formatting.
+  - **Token Saver**: 30%–50% token compression eliminating filler while preserving technical depth.
+  - **Production Strict**: Strict types, edge-case handling, error states, and unit test requirements.
+  - **Deep Reasoning**: Chain-of-thought analysis, step-by-step logic, and self-verification.
+- 📊 **Real-time Prompt Analytics**: Token count before & after, savings percentage, and automated detection of roles, constraints, and output schemas.
+- 💾 **Local Prompt Library**: Save, organize, export (JSON), and copy generated prompts directly in your browser with zero server database overhead.
+- 🎨 **Adaptive Design System**: Dark/Light mode with glowing per-model aesthetics, glassmorphism blur, and full mobile responsiveness.
+- 🛡️ **Production-Hardened**: Security headers, non-printable character sanitization, 25s timeouts, multi-model fallback chain, and custom error boundaries.
+
+---
+
+## 🧪 Testing & Reliability
+
+The project features an automated testing suite built with **Jest** and **React Testing Library**:
+
+- **79 Unit & Integration Tests (100% Pass Rate)**
+- Pure utility tests (`estimateTokens`, `sanitizeInput`, `withTimeout`)
+- Schema & data integrity validation for all models, domains, and strategies
+- React component UI and accessibility testing
+- API route verification with simulated Gemini client responses
+
+```bash
+npm test
+```
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **AI Engine**: [Google Gemini 3.7 Flash API](https://ai.google.dev/) (`@google/genai`)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Testing**: [Jest](https://jestjs.io/) & [React Testing Library](https://testing-library.com/)
+
+---
+
+## 📁 Project Structure
+
+```
+Prompt-helper/
+├── __tests__/                  ← Jest & RTL test suites (79 tests)
+│   ├── api-generate.test.ts
+│   ├── components.test.tsx
+│   ├── data.test.ts
+│   ├── setup.ts
+│   ├── types.test.ts
+│   └── utils.test.ts
+├── app/
+│   ├── api/generate/route.ts   ← Gemini API endpoint with fallback chain
+│   ├── error.tsx               ← Client-side error boundary
+│   ├── loading.tsx             ← Hydration skeleton
+│   ├── not-found.tsx           ← Branded 404 page
+│   ├── opengraph-image.tsx     ← Edge-rendered dynamic OG image
+│   ├── robots.ts               ← SEO robots exclusion
+│   ├── sitemap.ts              ← Dynamic sitemap
+│   ├── layout.tsx              ← Root layout with serif & sans fonts
+│   └── page.tsx                ← Interactive application page
+├── components/                 ← Reusable UI components
+├── data/                       ← Models & domain data configurations
+├── hooks/                      ← Custom React hooks (library & generator)
+├── types/                      ← TypeScript interfaces
+└── jest.config.ts              ← Jest testing configuration
+```
+
+---
+
+## 🏁 Quick Start
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/yared2124/Prompt-helper.git
+cd Prompt-helper
+```
+
+### 2. Install dependencies
 ```bash
 npm install
 ```
 
-### 2. Add your Gemini API key
-```bash
-cp .env.local.example .env.local
+### 3. Set up environment variables
+Create a `.env.local` file in the root directory:
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
-Edit `.env.local` and add your key:
-```
-GEMINI_API_KEY=your_key_here
-```
-Get a free key at: https://aistudio.google.com/app/apikey
+> Get a free API key at [Google AI Studio](https://aistudio.google.com/).
 
-### 3. Run the dev server
+### 4. Run the development server
 ```bash
 npm run dev
 ```
-
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## How It Works
+---
 
-1. **Choose AI** — Select which AI you're writing the prompt for (Claude, ChatGPT, Gemini, etc.)
-2. **Choose Domain** — Pick your topic area (Coding, Education, Business, etc.)
-3. **Describe your goal** — Type what you want in plain language
-4. **Generate** — Get a perfectly structured, token-efficient prompt tailored to your chosen AI
-5. **Copy & Save** — Copy to clipboard or save to your browser library
+## 📄 License
 
-## Tech Stack
-
-- **Next.js 14** (App Router) + TypeScript
-- **Tailwind CSS** (glassmorphism dark theme)
-- **Google Gemini API** (`@google/genai`) — prompt generation engine
-- **Lucide React** — icons
-- **localStorage** — browser-based prompt library
-
-## Project Structure
-
-```
-Prompt-helper/
-├── app/
-│   ├── api/generate/route.ts   ← Gemini API endpoint
-│   ├── layout.tsx
-│   ├── page.tsx                ← Main app page
-│   └── globals.css
-├── components/
-│   ├── Header.tsx
-│   ├── AISelector.tsx          ← 10 AI model cards
-│   ├── DomainSelector.tsx      ← 12 domain chips
-│   ├── PromptInput.tsx         ← Goal input + generate button
-│   ├── PromptOutput.tsx        ← Enhanced prompt + token stats
-│   └── PromptLibrary.tsx       ← Saved prompts drawer
-├── data/
-│   ├── aiModels.ts             ← AI model configs
-│   └── domains.ts              ← Domain categories
-├── hooks/
-│   ├── usePromptGenerator.ts   ← API call logic
-│   └── useLibrary.ts           ← localStorage management
-└── types/index.ts              ← TypeScript types
-```
+This project is open-source and available under the [MIT License](LICENSE).
