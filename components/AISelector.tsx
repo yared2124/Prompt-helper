@@ -50,13 +50,13 @@ export default function AISelector({
       {/* Header & Search */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <span className="w-6 h-6 rounded-lg bg-indigo-600 dark:bg-violet-600 text-white flex items-center justify-center text-xs font-bold shadow-sm">
+          <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2 font-serif">
+            <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-violet-600 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
               1
             </span>
             Target AI Model
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="text-xs text-[#717E7A] dark:text-slate-400 mt-0.5">
             Tailor structural tags, XML formats, and token density for your specific AI.
           </p>
         </div>
@@ -65,14 +65,14 @@ export default function AISelector({
         <div className="relative w-full sm:w-56">
           <Search
             size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#859490]"
           />
           <input
             type="text"
             placeholder="Search model or skill..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:border-indigo-500 transition-colors"
+            className="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-white dark:bg-white/5 border border-[#E7E2D8] dark:border-white/10 text-[#121E1B] dark:text-slate-200 placeholder-[#98A6A2] focus:outline-none focus:border-[#121E1B] dark:focus:border-violet-500 transition-colors shadow-[0_1px_4px_rgba(20,30,25,0.02)]"
           />
         </div>
       </div>
@@ -85,8 +85,8 @@ export default function AISelector({
             onClick={() => setActiveCategory(cat.id)}
             className={`text-xs px-3 py-1 rounded-lg font-medium whitespace-nowrap transition-all ${
               activeCategory === cat.id
-                ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm"
-                : "bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10"
+                ? "bg-[#121E1B] text-white dark:bg-white dark:text-slate-900 shadow-sm font-semibold"
+                : "bg-white dark:bg-white/5 border border-[#E7E2D8] dark:border-white/5 text-[#4E5B57] dark:text-slate-400 hover:bg-[#F5F2EA] dark:hover:bg-white/10"
             }`}
           >
             {cat.label}
@@ -104,31 +104,37 @@ export default function AISelector({
               onClick={() => onSelect(model)}
               className={`relative group text-left p-3 rounded-xl border transition-all duration-200 ${
                 isSelected
-                  ? `bg-indigo-50/80 dark:bg-violet-950/30 border-indigo-500 dark:border-violet-500 shadow-md ${model.bgGlow} scale-[1.02]`
-                  : "bg-white/70 dark:bg-white/[0.02] border-slate-200/80 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20 hover:scale-[1.01]"
+                  ? "bg-[#F6F3EC] dark:bg-violet-950/30 border-[#121E1B] dark:border-violet-500 shadow-md scale-[1.02]"
+                  : "bg-white dark:bg-white/[0.02] border-[#E7E2D8] dark:border-white/5 hover:border-[#121E1B]/40 dark:hover:border-white/20 hover:scale-[1.01] shadow-[0_2px_8px_-2px_rgba(20,30,25,0.03)]"
               }`}
             >
               {isSelected && (
-                <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-indigo-600 dark:bg-violet-500 flex items-center justify-center shadow-sm">
+                <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-[#121E1B] dark:bg-violet-500 flex items-center justify-center shadow-sm">
                   <Check size={10} className="text-white" />
                 </div>
               )}
 
               <div className="flex items-center gap-2.5 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-white/5 border border-indigo-200/50 dark:border-white/10 flex items-center justify-center text-indigo-600 dark:text-violet-400 shrink-0 group-hover:scale-105 transition-transform">
-                  <IconRenderer name={model.iconName} size={18} />
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all ${
+                    isSelected
+                      ? "bg-[#121E1B] text-white shadow-sm"
+                      : "bg-[#F4EFE6] dark:bg-white/5 border border-[#E5DFD4] dark:border-white/10 text-[#14201D] dark:text-violet-400 group-hover:bg-[#ECE5D8]"
+                  }`}
+                >
+                  <IconRenderer name={model.iconName} size={17} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="font-bold text-sm text-slate-900 dark:text-white truncate">
+                  <div className="font-bold text-sm text-[#121E1B] dark:text-white truncate">
                     {model.name}
                   </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                  <div className="text-[11px] text-[#717E7A] dark:text-slate-400 truncate">
                     {model.provider}
                   </div>
                 </div>
               </div>
 
-              <div className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2 leading-tight min-h-[28px]">
+              <div className="text-[11px] text-[#55635F] dark:text-slate-400 line-clamp-2 leading-tight min-h-[28px]">
                 {model.description}
               </div>
             </button>
@@ -138,17 +144,17 @@ export default function AISelector({
 
       {/* Active Model Focus & Variant Bar */}
       {selected && (
-        <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in">
+        <div className="p-3.5 rounded-xl bg-white dark:bg-white/[0.03] border border-[#E7E2D8] dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fade-in shadow-[0_2px_10px_-2px_rgba(20,30,25,0.03)]">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-violet-950/60 border border-indigo-200 dark:border-violet-500/30 flex items-center justify-center text-indigo-600 dark:text-violet-400 shrink-0 shadow-sm">
-              <IconRenderer name={selected.iconName} size={22} />
+            <div className="w-10 h-10 rounded-xl bg-[#121E1B] dark:bg-violet-950/60 border border-[#121E1B] dark:border-violet-500/30 flex items-center justify-center text-white dark:text-violet-400 shrink-0 shadow-sm">
+              <IconRenderer name={selected.iconName} size={20} />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-bold text-sm text-slate-900 dark:text-white">
+                <span className="font-bold text-sm text-[#121E1B] dark:text-white">
                   {selected.name}
                 </span>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-violet-500/20 text-indigo-700 dark:text-violet-300">
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#EFECE4] dark:bg-violet-500/20 text-[#1A4B3C] dark:text-violet-300">
                   {selected.category}
                 </span>
               </div>
@@ -156,9 +162,9 @@ export default function AISelector({
                 {selected.strengths.map((str) => (
                   <span
                     key={str}
-                    className="text-[10px] px-2 py-0.5 rounded-md bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 flex items-center gap-1"
+                    className="text-[10px] px-2 py-0.5 rounded-md bg-[#FAF7F2] dark:bg-white/5 border border-[#E7E2D8] dark:border-white/10 text-[#44524E] dark:text-slate-300 flex items-center gap-1 font-medium"
                   >
-                    <Check size={10} className="text-indigo-600 dark:text-violet-400" />
+                    <Check size={10} className="text-[#1A5343] dark:text-violet-400" />
                     <span>{str}</span>
                   </span>
                 ))}
@@ -169,11 +175,11 @@ export default function AISelector({
           {/* Model Variant Selector */}
           {selected.models.length > 1 && onSelectVariant && (
             <div className="flex items-center gap-2 shrink-0">
-              <Cpu size={14} className="text-slate-400" />
+              <Cpu size={14} className="text-[#758480]" />
               <select
                 value={selectedVariant || selected.selectedModel}
                 onChange={(e) => onSelectVariant(e.target.value)}
-                className="text-xs px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/15 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-indigo-500 font-mono"
+                className="text-xs px-2.5 py-1.5 rounded-lg bg-[#FAF7F2] dark:bg-slate-900 border border-[#E7E2D8] dark:border-white/15 text-[#121E1B] dark:text-slate-200 focus:outline-none focus:border-[#121E1B] dark:focus:border-indigo-500 font-mono"
               >
                 {selected.models.map((m) => (
                   <option key={m} value={m}>
