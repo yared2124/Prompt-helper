@@ -6,6 +6,8 @@
  * Next.js runtime while testing pure logic.
  */
 
+import { cleanPromptFormatting } from "@/lib/cleanPrompt";
+
 // ─── Replicas of pure functions from app/api/generate/route.ts ────────────────
 
 function estimateTokens(text: string): number {
@@ -110,5 +112,44 @@ describe("withTimeout", () => {
   it("rejects with original error when promise rejects before timeout", async () => {
     const failing = Promise.reject(new Error("API error"));
     await expect(withTimeout(failing, 5000)).rejects.toThrow("API error");
+  });
+});
+
+describe("cleanPromptFormatting", () => {
+  it("removes markdown heading hashes and formats as clean uppercase titles", () => {
+    const input = "### Role\nYou are an expert.\n## Goal:\nBuild an API.";
+    const result = cleanPromptFormatting(input);
+    expect(result).not.toContain("#");
+    expect(result).toContain("ROLE:");
+    expect(result).toContain("GOAL:");
+  });
+
+  it("removes bold and italic asterisks", () => {
+    const input = "Use **TypeScript** with *strict* mode and ***full typing***.";
+    const result = cleanPromptFormatting(input);
+    expect(result).not.toContain("*");
+    expect(result).toContain("Use TypeScript with strict mode and full typing.");
+  });
+
+  it("converts bullet asterisks to clean hyphens", () => {
+    const input = "* Feature A\n* Feature B\n  * Nested feature";
+    const result = cleanPromptFormatting(input);
+    expect(result).not.toContain("*");
+    expect(result).toContain("- Feature A");
+    expect(result).toContain("- Feature B");
+    expect(result).toContain("  - Nested feature");
+  });
+
+  it("handles empty or falsy inputs gracefully", () => {
+    expect(cleanPromptFormatting("")).toBe("");
+  });
+
+  it("preserves XML tags and clean hyphenated structure", () => {
+    const input = "<role>\nYou are a coder.\n</role>\n<instructions>\n- Rule 1\n- Rule 2\n</instructions>";
+    const result = cleanPromptFormatting(input);
+    expect(result).not.toContain("#");
+    expect(result).not.toContain("*");
+    expect(result).toContain("<role>");
+    expect(result).toContain("- Rule 1");
   });
 });

@@ -14,6 +14,8 @@ import {
   Lightbulb,
 } from "lucide-react";
 
+import { cleanPromptFormatting } from "@/lib/cleanPrompt";
+
 interface PromptOutputProps {
   result: GenerateResponse | null;
   selectedAI: AIModel | null;
@@ -40,12 +42,14 @@ export default function PromptOutput({
     "prompt"
   );
 
+  const displayPrompt = result?.enhancedPrompt ? cleanPromptFormatting(result.enhancedPrompt) : "";
+
   if (!result && !isLoading) return null;
 
   const handleCopy = async () => {
-    if (!result) return;
+    if (!displayPrompt) return;
     try {
-      await navigator.clipboard.writeText(result.enhancedPrompt);
+      await navigator.clipboard.writeText(displayPrompt);
       setCopied(true);
       onShowToast("Prompt copied to clipboard! Ready to paste into AI.", "success");
       setTimeout(() => setCopied(false), 2200);
@@ -55,15 +59,15 @@ export default function PromptOutput({
   };
 
   const handleLaunchInAI = async () => {
-    if (!result || !selectedAI) return;
-    await navigator.clipboard.writeText(result.enhancedPrompt);
+    if (!displayPrompt || !selectedAI) return;
+    await navigator.clipboard.writeText(displayPrompt);
     onShowToast(`Copied! Opening ${selectedAI.name}...`, "success");
     window.open(selectedAI.webUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleExportMarkdown = () => {
     if (!result || !selectedAI) return;
-    const content = `# Prompt for ${selectedAI.name} (${selectedAI.provider})\n**Domain:** ${domainName}\n**Date:** ${new Date().toLocaleDateString()}\n\n---\n\n## Optimized Prompt\n\n\`\`\`\n${result.enhancedPrompt}\n\`\`\`\n\n## Expert Tips\n${result.tips.map((t) => `- ${t}`).join("\n")}\n`;
+    const content = `PROMPT FOR ${selectedAI.name.toUpperCase()} (${selectedAI.provider.toUpperCase()})\nDomain: ${domainName}\nDate: ${new Date().toLocaleDateString()}\n\n---\n\nOPTIMIZED PROMPT:\n\n${displayPrompt}\n\nEXPERT TIPS:\n${result.tips.map((t) => `- ${cleanPromptFormatting(t)}`).join("\n")}\n`;
     const blob = new Blob([content], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -71,7 +75,7 @@ export default function PromptOutput({
     a.download = `prompt-${selectedAI.id}-${Date.now()}.md`;
     a.click();
     URL.revokeObjectURL(url);
-    onShowToast("Exported as Markdown file!", "success");
+    onShowToast("Exported as clean prompt file!", "success");
   };
 
   const handleExportJSON = () => {
@@ -299,7 +303,7 @@ export default function PromptOutput({
               </div>
             ) : (
               <pre className="text-xs sm:text-sm font-mono text-[#121E1B] dark:text-slate-100 leading-relaxed whitespace-pre-wrap select-all">
-                {result?.enhancedPrompt}
+                {displayPrompt}
               </pre>
             )}
           </div>
@@ -333,7 +337,7 @@ export default function PromptOutput({
                 </span>
               </div>
               <pre className="text-xs font-mono text-[#121E1B] dark:text-slate-200 p-3 rounded-xl bg-[#F6F3EC] dark:bg-emerald-950/20 border border-[#E7E2D8] dark:border-emerald-500/20 leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto">
-                {result.enhancedPrompt}
+                {displayPrompt}
               </pre>
             </div>
           </div>

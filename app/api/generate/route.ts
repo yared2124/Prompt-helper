@@ -22,6 +22,8 @@ function sanitizeInput(text: string): string {
   return text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
 }
 
+import { cleanPromptFormatting } from "@/lib/cleanPrompt";
+
 function withTimeout<T>(promise: Promise<T>, ms = 20000): Promise<T> {
   return Promise.race([
     promise,
@@ -106,11 +108,18 @@ ${selectedAI.name}'S STRENGTHS & IDIOMS: ${selectedAI.strengths.join(", ")}
 ${strategyInstructions}
 
 GUIDELINES FOR ${selectedAI.name}:
-- For Claude: Prefer XML tags (<context>, <instructions>, <requirements>, <output_format>) as Claude adheres to XML tags with supreme accuracy.
-- For ChatGPT / OpenAI: Use Markdown headings, explicit system constraints, role definitions, and few-shot or schema definitions.
-- For Gemini: Emphasize multimodal or contextual reasoning, clear instruction hierarchy, and structured tables/markdown.
+- For Claude: Prefer clean XML tags (<context>, <instructions>, <requirements>, <output_format>) as Claude adheres to XML tags with supreme accuracy.
+- For ChatGPT / OpenAI: Use clean uppercase section labels (ROLE:, CONSTRAINTS:, REQUIREMENTS:, OUTPUT FORMAT:) with clean dashed lists ('- ').
+- For Gemini: Emphasize clear instruction hierarchy, role clarity, and clean structured sections.
 - For DeepSeek / Reasoning models: Emphasize chain-of-thought, mathematical/algorithmic rigor, and step-by-step logic.
 - For Open Weights (LLaMA / Mistral): Use concise, unambiguous directives and explicit format templates.
+
+CRITICAL OUTPUT FORMATTING RULES (STRICTLY FORBIDDEN: '#' AND '*'):
+- DO NOT use markdown heading hashes ('#', '##', '###', '####'). Never prefix titles with '#' or '###'. Use clean uppercase titles followed by a colon (e.g., ROLE:, TASK:, SPECIFICATIONS:, CONSTRAINTS:, OUTPUT FORMAT:) or XML tags.
+- DO NOT use asterisks ('*', '**', '***') anywhere. No '**bold**', no '*bullet*', no '***italics***'.
+- For bulleted lists, ALWAYS use clean hyphens ('- ') or numbered items ('1. ', '2. ').
+- For emphasis, use UPPERCASE words or clear plain phrasing, NEVER asterisks.
+- Return a clean, clear, professionally structured prompt ready to paste directly into ${selectedAI.name}.
 
 Respond with a JSON object in this exact format (no surrounding markdown, no extra commentary, just valid JSON):
 {
@@ -177,18 +186,21 @@ Respond with a JSON object in this exact format (no surrounding markdown, no ext
       };
     }
 
+    const cleanedPrompt = cleanPromptFormatting(parsed.enhancedPrompt);
+    const cleanedTips = (parsed.tips || []).map((t) => cleanPromptFormatting(t));
+
     const tokensBefore = estimateTokens(userInput);
-    const tokensAfter = estimateTokens(parsed.enhancedPrompt);
+    const tokensAfter = estimateTokens(cleanedPrompt);
 
     const result: GenerateResponse = {
-      enhancedPrompt: parsed.enhancedPrompt,
-      tips: parsed.tips || [],
+      enhancedPrompt: cleanedPrompt,
+      tips: cleanedTips,
       tokensBefore,
       tokensAfter,
       metrics: {
-        roleDetected: parsed.enhancedPrompt.toLowerCase().includes("you are") || parsed.enhancedPrompt.toLowerCase().includes("role"),
-        constraintsDetected: parsed.enhancedPrompt.includes("<") || parsed.enhancedPrompt.toLowerCase().includes("constraint") || parsed.enhancedPrompt.toLowerCase().includes("must"),
-        outputFormatDetected: parsed.enhancedPrompt.toLowerCase().includes("format") || parsed.enhancedPrompt.toLowerCase().includes("schema"),
+        roleDetected: cleanedPrompt.toLowerCase().includes("you are") || cleanedPrompt.toLowerCase().includes("role"),
+        constraintsDetected: cleanedPrompt.includes("<") || cleanedPrompt.toLowerCase().includes("constraint") || cleanedPrompt.toLowerCase().includes("must"),
+        outputFormatDetected: cleanedPrompt.toLowerCase().includes("format") || cleanedPrompt.toLowerCase().includes("schema"),
         savingsPercentage: Math.round(((tokensAfter - tokensBefore) / Math.max(tokensBefore, 1)) * 100),
       },
     };
