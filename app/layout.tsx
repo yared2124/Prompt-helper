@@ -49,7 +49,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var saved = localStorage.getItem('promptcraft_theme');
+                  var saved = localStorage.getItem('prompthelper_theme');
                   var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                   if (saved === 'light') {
                     document.documentElement.classList.remove('dark');

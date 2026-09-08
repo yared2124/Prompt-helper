@@ -1,4 +1,4 @@
-# PromptCraft — AI Prompt Helper
+# promptHelper — AI Prompt Helper
 
 A beautiful, dark-themed web app that helps you craft perfect, token-efficient prompts for any AI model.
 

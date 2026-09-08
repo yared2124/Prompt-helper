@@ -1,4 +1,4 @@
-// Types for the PromptCraft application
+// Types for the promptHelper application
 
 export interface AIModel {
   id: string;

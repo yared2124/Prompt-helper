@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { GeneratedPrompt } from "@/types";
 
-const STORAGE_KEY = "promptcraft_library";
+const STORAGE_KEY = "prompthelper_library";
 
 export function useLibrary() {
   const [prompts, setPrompts] = useState<GeneratedPrompt[]>([]);
