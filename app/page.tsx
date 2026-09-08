@@ -195,7 +195,7 @@ export default function Home() {
             <span className="text-[#1A5343] dark:gradient-text">real constraints.</span>
           </h1>
 
-          <p className="text-[#4A5552] dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+          <p className="italic text-[#4A5552] dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
             Stop wasting tokens with casual, ambiguous prompts. Tell promptHelper what you want in plain words — we transform it into an optimized, model-specific prompt tailored for Claude, ChatGPT, Gemini, and DeepSeek.
           </p>
 
