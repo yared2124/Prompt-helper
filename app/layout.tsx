@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PromptCraft — AI Prompt Architect & Token Optimizer",
+  title: "PromptHelper — AI Prompt Architect & Token Optimizer",
   description:
     "Transform casual goals into high-impact, token-efficient prompts tailored for Claude, ChatGPT, Gemini, DeepSeek, and more. Built with Next.js 14 and Gemini 3.7 Flash.",
   keywords: [
@@ -18,18 +18,18 @@ export const metadata: Metadata = {
     "Developer Tools",
     "Next.js Portfolio",
   ],
-  authors: [{ name: "PromptCraft Team" }],
+  authors: [{ name: "PromptHelper Team" }],
   openGraph: {
-    title: "PromptCraft — AI Prompt Architect & Token Optimizer",
+    title: "PromptHelper — AI Prompt Architect & Token Optimizer",
     description:
       "Craft production-grade, token-efficient prompts for 10+ AI models across 12 domains. Zero fluff, strict XML/Markdown schemas, and direct AI launcher.",
     type: "website",
     locale: "en_US",
-    siteName: "PromptCraft",
+    siteName: "PromptHelper",
   },
   twitter: {
     card: "summary_large_image",
-    title: "PromptCraft — AI Prompt Architect",
+    title: "PromptHelper  AI Prompt Architect",
     description:
       "Craft production-grade prompts for Claude, ChatGPT, Gemini, and DeepSeek. Built with Next.js & Gemini 3.7 Flash.",
   },
