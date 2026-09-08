@@ -218,7 +218,7 @@ export default function PromptLibrary({
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#F4EFE6] dark:bg-violet-950/50 text-[#14201D] dark:text-violet-300">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#F4EFE6] dark:bg-emerald-950/50 text-[#14201D] dark:text-emerald-300">
                       {p.aiProvider}
                     </span>
                     <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#FAF7F2] border border-[#E7E2D8] dark:bg-white/10 font-medium text-[#44524E] dark:text-slate-300">

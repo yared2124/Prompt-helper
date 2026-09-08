@@ -55,7 +55,7 @@ export default function PromptInput({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2 font-serif">
-            <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-gradient-to-tr dark:from-indigo-600 dark:to-violet-500 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
+            <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-gradient-to-tr dark:from-emerald-600 dark:to-teal-500 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
               3
             </span>
             Your Request / Goal
@@ -79,7 +79,7 @@ export default function PromptInput({
       </div>
 
       {/* Textarea Container */}
-      <div className="relative rounded-2xl border border-[#E7E2D8] dark:border-white/10 bg-white dark:bg-black/30 overflow-hidden focus-within:border-[#121E1B] dark:focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-[#121E1B]/5 dark:focus-within:ring-violet-500/10 transition-all shadow-[0_2px_10px_-2px_rgba(20,30,25,0.03)]">
+      <div className="relative rounded-2xl border border-[#E7E2D8] dark:border-white/10 bg-white dark:bg-black/30 overflow-hidden focus-within:border-[#121E1B] dark:focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-[#121E1B]/5 dark:focus-within:ring-emerald-500/15 transition-all shadow-[0_2px_10px_-2px_rgba(20,30,25,0.03)]">
         <textarea
           ref={textareaRef}
           value={value}
@@ -133,7 +133,7 @@ export default function PromptInput({
         disabled={!canGenerate}
         className={`w-full py-3.5 px-6 rounded-xl font-bold text-sm flex items-center justify-center gap-2.5 transition-all duration-200 ${
           canGenerate
-            ? "bg-[#121E1B] hover:bg-[#1E332E] text-white shadow-lg shadow-black/10 dark:bg-gradient-to-r dark:from-indigo-600 dark:via-violet-600 dark:to-indigo-600 dark:hover:from-indigo-500 dark:hover:to-violet-500 ring-pulse cursor-pointer"
+            ? "bg-[#121E1B] hover:bg-[#1E332E] text-white shadow-lg shadow-black/10 dark:bg-gradient-to-r dark:from-emerald-600 dark:via-teal-600 dark:to-emerald-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 dark:shadow-[0_0_25px_rgba(16,185,129,0.35)] ring-pulse cursor-pointer"
             : "bg-[#EFECE4] dark:bg-white/5 text-[#98A6A2] dark:text-slate-600 cursor-not-allowed border border-[#E7E2D8] dark:border-white/5"
         }`}
       >

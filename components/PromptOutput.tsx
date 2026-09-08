@@ -170,11 +170,11 @@ export default function PromptOutput({
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-white dark:bg-violet-950/30 border border-[#E7E2D8] dark:border-violet-500/30 shadow-[0_2px_8px_-2px_rgba(20,30,25,0.03)]">
-            <span className="text-[11px] text-[#1A5343] dark:text-violet-400 uppercase font-semibold">
+          <div className="p-3 rounded-xl bg-white dark:bg-teal-950/30 border border-[#E7E2D8] dark:border-teal-500/30 shadow-[0_2px_8px_-2px_rgba(20,30,25,0.03)]">
+            <span className="text-[11px] text-[#1A5343] dark:text-teal-400 uppercase font-semibold">
               Optimized Prompt
             </span>
-            <div className="text-base font-bold font-mono text-[#1A5343] dark:text-violet-300 mt-0.5">
+            <div className="text-base font-bold font-mono text-[#1A5343] dark:text-teal-300 mt-0.5">
               ~{result.tokensAfter} tokens
             </div>
           </div>
@@ -205,7 +205,7 @@ export default function PromptOutput({
         {/* Action Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-[#FAF7F2] dark:bg-white/[0.02] border-b border-[#E7E2D8] dark:border-white/10">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-[#121E1B] dark:text-violet-400 font-mono">
+            <span className="text-xs font-bold text-[#121E1B] dark:text-emerald-400 font-mono">
               {selectedAI?.name} Prompt Block
             </span>
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#F0EBE0] dark:bg-white/10 font-mono text-[#3E4D48] dark:text-slate-300 font-medium">
@@ -219,7 +219,7 @@ export default function PromptOutput({
               <button
                 type="button"
                 onClick={handleLaunchInAI}
-                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#121E1B] hover:bg-[#1E332E] text-white font-semibold transition-all shadow-sm dark:bg-gradient-to-r dark:from-violet-600 dark:to-indigo-600 dark:hover:from-violet-500 dark:hover:to-indigo-500 dark:shadow-[0_0_14px_rgba(124,58,237,0.35)]"
+                className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#121E1B] hover:bg-[#1E332E] text-white font-semibold transition-all shadow-sm dark:bg-gradient-to-r dark:from-emerald-600 dark:to-teal-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 dark:shadow-[0_0_14px_rgba(16,185,129,0.35)]"
                 title={`Copy and open directly in ${selectedAI.name}`}
                 aria-label={`Copy and open prompt in ${selectedAI.name}`}
               >
@@ -324,15 +324,15 @@ export default function PromptOutput({
 
             <div className="space-y-2 md:pl-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#1A5343] dark:text-violet-400 uppercase tracking-wider flex items-center gap-1">
+                <span className="text-xs font-bold text-[#1A5343] dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1">
                   <Sparkles size={12} />
                   Engineered Structure
                 </span>
-                <span className="text-[11px] font-mono text-[#1A5343] dark:text-violet-400 font-bold">
+                <span className="text-[11px] font-mono text-[#1A5343] dark:text-emerald-400 font-bold">
                   {result.tokensAfter} tokens
                 </span>
               </div>
-              <pre className="text-xs font-mono text-[#121E1B] dark:text-slate-200 p-3 rounded-xl bg-[#F6F3EC] dark:bg-violet-950/20 border border-[#E7E2D8] dark:border-violet-500/20 leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto">
+              <pre className="text-xs font-mono text-[#121E1B] dark:text-slate-200 p-3 rounded-xl bg-[#F6F3EC] dark:bg-emerald-950/20 border border-[#E7E2D8] dark:border-emerald-500/20 leading-relaxed whitespace-pre-wrap max-h-80 overflow-y-auto">
                 {result.enhancedPrompt}
               </pre>
             </div>

@@ -174,11 +174,11 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen relative bg-warm-grid transition-colors duration-300 selection:bg-amber-500/20 dark:selection:bg-indigo-500/30">
-      {/* Background Solar Orb in Light Mode / Nebulae in Dark Mode */}
-      <div className="bg-orb w-[420px] h-[420px] bg-amber-300/60 dark:bg-violet-600 top-[-80px] left-[-80px]" />
-      <div className="bg-orb w-80 h-80 bg-orange-200/50 dark:bg-indigo-600 top-[35%] right-[-80px]" />
-      <div className="bg-orb w-72 h-72 bg-emerald-100/40 dark:bg-cyan-600 bottom-[10%] left-[15%]" />
+    <div className="min-h-screen relative bg-warm-grid transition-colors duration-300 selection:bg-amber-500/20 dark:selection:bg-emerald-500/30">
+      {/* Background Solar Orb in Light Mode / Cyber Emerald Nebulae in Dark Mode */}
+      <div className="bg-orb w-[420px] h-[420px] bg-amber-300/60 dark:bg-emerald-600/30 top-[-80px] left-[-80px]" />
+      <div className="bg-orb w-80 h-80 bg-orange-200/50 dark:bg-teal-600/25 top-[35%] right-[-80px]" />
+      <div className="bg-orb w-72 h-72 bg-emerald-100/40 dark:bg-cyan-600/20 bottom-[10%] left-[15%]" />
 
       {/* Global Header */}
       <Header
@@ -191,8 +191,8 @@ export default function Home() {
         <section className="text-center py-6 sm:py-10 space-y-5">
           {/* Eyebrow badge matching the image */}
           <div className="inline-flex items-center justify-center gap-2">
-            <span className="w-5 h-[2px] bg-[#C2671A] dark:bg-violet-400" />
-            <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#C2671A] dark:text-violet-400">
+            <span className="w-5 h-[2px] bg-[#C2671A] dark:bg-emerald-400" />
+            <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#C2671A] dark:text-emerald-400">
               AI Prompting
             </span>
           </div>

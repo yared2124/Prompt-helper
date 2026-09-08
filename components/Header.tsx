@@ -16,10 +16,10 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
         <div className="flex items-center gap-3">
           <div className="relative group cursor-pointer">
             {/* Ambient radiant aura in dark mode */}
-            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 opacity-0 dark:opacity-75 blur-[9px] group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 opacity-0 dark:opacity-80 blur-[9px] group-hover:opacity-100 transition-opacity duration-500" />
 
             {/* Squircle body with glossy bevel */}
-            <div className="relative w-10 h-10 rounded-xl bg-[#121E1B] dark:bg-gradient-to-br dark:from-sky-400 dark:via-indigo-600 dark:to-purple-700 p-[1px] shadow-md dark:shadow-[0_0_20px_rgba(99,102,241,0.4)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+            <div className="relative w-10 h-10 rounded-xl bg-[#121E1B] dark:bg-gradient-to-br dark:from-emerald-400 dark:via-teal-600 dark:to-emerald-800 p-[1px] shadow-md dark:shadow-[0_0_22px_rgba(16,185,129,0.45)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
               {/* Inner frosted glass highlight */}
               <div className="w-full h-full rounded-[11px] bg-gradient-to-b from-white/25 via-transparent to-black/20 dark:from-white/30 dark:to-transparent flex items-center justify-center border border-white/20 dark:border-white/30 backdrop-blur-sm">
                 <Sparkles

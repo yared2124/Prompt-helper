@@ -124,28 +124,28 @@ export default function AISelector({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2 font-serif">
-            <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-gradient-to-tr dark:from-violet-600 dark:to-indigo-500 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
+            <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-gradient-to-tr dark:from-emerald-600 dark:to-teal-500 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
               1
             </span>
             Target AI Model
           </h2>
           <p className="text-xs text-[#717E7A] dark:text-slate-400 mt-0.5">
-            Tailor structural tags, XML formats, and token density for your specific AI.
+            Choose the model you&apos;re targeting. We&apos;ll format specifically for its native idioms and strengths.
           </p>
         </div>
 
         {/* Search Input */}
-        <div className="relative w-full sm:w-56">
+        <div className="relative w-full sm:w-60">
           <Search
             size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#859490] dark:text-slate-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#838F8B]"
           />
           <input
             type="text"
-            placeholder="Search model or skill..."
+            placeholder="Search AI models..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-white dark:bg-white/5 border border-[#E7E2D8] dark:border-white/10 text-[#121E1B] dark:text-slate-200 placeholder-[#98A6A2] focus:outline-none focus:border-[#121E1B] dark:focus:border-violet-500 transition-colors shadow-[0_1px_4px_rgba(20,30,25,0.02)]"
+            className="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-white dark:bg-white/5 border border-[#E7E2D8] dark:border-white/10 text-[#121E1B] dark:text-slate-200 placeholder-[#98A6A2] focus:outline-none focus:border-[#121E1B] dark:focus:border-emerald-500 transition-colors shadow-[0_1px_4px_rgba(20,30,25,0.02)]"
           />
         </div>
       </div>
