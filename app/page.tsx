@@ -17,7 +17,6 @@ import ToastContainer, { ToastMessage } from "@/components/Toast";
 import IconRenderer from "@/components/IconRenderer";
 import {
   AlertCircle,
-  Sparkles,
   Zap,
   ArrowDown,
   Terminal,

@@ -18,7 +18,7 @@ describe("TypeScript interfaces - structural checks", () => {
       id: "test",
       name: "Test Model",
       provider: "TestCo",
-      iconName: "Sparkles",
+      iconName: "Flame",
       color: "text-blue-500",
       borderColor: "border-blue-500/40",
       bgGlow: "shadow-blue-500/15",

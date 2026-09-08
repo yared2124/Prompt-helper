@@ -9,7 +9,7 @@ import {
   RefreshCw,
   ExternalLink,
   Download,
-  Sparkles,
+  FileCode2,
   Zap,
   Lightbulb,
 } from "lucide-react";
@@ -193,7 +193,7 @@ export default function PromptOutput({
               Engine Grounding
             </span>
             <div className="text-base font-bold text-[#121E1B] dark:text-slate-200 mt-0.5 flex items-center gap-1">
-              <Sparkles size={13} className="text-amber-500" />
+              <Zap size={13} className="text-amber-500" />
               <span>Zero Fluff</span>
             </div>
           </div>
@@ -325,7 +325,7 @@ export default function PromptOutput({
             <div className="space-y-2 md:pl-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#1A5343] dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1">
-                  <Sparkles size={12} />
+                  <FileCode2 size={13} />
                   Engineered Structure
                 </span>
                 <span className="text-[11px] font-mono text-[#1A5343] dark:text-emerald-400 font-bold">

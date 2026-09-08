@@ -104,9 +104,9 @@ describe("IconRenderer", () => {
     expect(container.querySelector("svg")).toBeInTheDocument();
   });
 
-  it("falls back to Sparkles for an unknown icon name", () => {
+  it("falls back to Bot for an unknown icon name", () => {
     const { container } = render(<IconRenderer name="NonExistentIcon" />);
-    // Still renders an SVG (the fallback Sparkles)
+    // Still renders an SVG (the fallback Bot)
     expect(container.querySelector("svg")).toBeInTheDocument();
   });
 

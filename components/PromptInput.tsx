@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { AIModel, Domain } from "@/types";
-import { Sparkles, Loader2, CornerDownLeft, Eraser, Zap } from "lucide-react";
+import { Loader2, CornerDownLeft, Eraser, Zap } from "lucide-react";
 import StrategySelector from "@/components/StrategySelector";
 
 interface PromptInputProps {
@@ -144,7 +144,7 @@ export default function PromptInput({
           </>
         ) : (
           <>
-            <Sparkles size={18} />
+            <Zap size={18} className="text-amber-400 dark:text-emerald-400" />
             <span>
               Generate Optimized Prompt
               {selectedAI ? ` for ${selectedAI.name}` : ""}

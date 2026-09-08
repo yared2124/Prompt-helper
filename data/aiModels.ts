@@ -4,7 +4,7 @@ export const PROMPT_STRATEGIES: PromptStrategy[] = [
   {
     id: "balanced",
     name: "Standard Smart",
-    iconName: "Sparkles",
+    iconName: "Sliders",
     description: "Clear roles, constraints, and structured output formatting.",
     benefit: "Best for general daily tasks",
   },
@@ -36,7 +36,7 @@ export const AI_MODELS: AIModel[] = [
     id: "claude",
     name: "Claude",
     provider: "Anthropic",
-    iconName: "Sparkles",
+    iconName: "Flame",
     color: "text-amber-500 dark:text-amber-400",
     borderColor: "border-amber-500/40",
     bgGlow: "shadow-amber-500/15",

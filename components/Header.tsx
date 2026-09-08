@@ -41,10 +41,7 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
                 @TechYada21
               </a>
             </span>
-            <span className="hidden lg:inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EAF2ED] dark:bg-emerald-500/20 text-[#1B4D3E] dark:text-emerald-400 border border-[#CEE0D5] dark:border-emerald-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#1B4D3E] dark:bg-emerald-400 animate-pulse" />
-              Gemini 3.7 Flash
-            </span>
+            
           </div>
         </div>
 

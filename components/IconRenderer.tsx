@@ -15,7 +15,7 @@ import {
   Languages,
   Scale,
   Target,
-  Sparkles,
+  Sliders,
   Zap,
   ShieldCheck,
   BrainCircuit,
@@ -53,7 +53,7 @@ const ICON_MAP: Record<string, React.FC<LucideProps>> = {
   Target,
 
   // Strategy icons
-  Sparkles,
+  Sliders,
   Zap,
   ShieldCheck,
   BrainCircuit,
@@ -84,6 +84,6 @@ export default function IconRenderer({
   size = 18,
   ...props
 }: IconRendererProps) {
-  const Component = ICON_MAP[name] || Sparkles;
+  const Component = ICON_MAP[name] || Bot;
   return <Component size={size} className={className} {...props} />;
 }
