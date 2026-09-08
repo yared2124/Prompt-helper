@@ -16,7 +16,7 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
         <div>
           <div className="flex items-center gap-2">
             <span className="font-black text-lg sm:text-xl tracking-tight text-[#121E1B] dark:text-white">
-              promptHelper
+              prompt Helper
             </span>
             <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EAF2ED] dark:bg-emerald-500/20 text-[#1B4D3E] dark:text-emerald-400 border border-[#CEE0D5] dark:border-emerald-500/20">
               <span className="w-1.5 h-1.5 rounded-full bg-[#1B4D3E] dark:bg-emerald-400 animate-pulse" />
@@ -25,9 +25,15 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
           </div>
             <span className="text-[10px] sm:text-[11px] text-[#121E1B] dark:text-slate-300 block leading-tight font-medium">
               AI-Native Prompt Architect built by{" "}
-              <span className="font-bold text-black dark:text-emerald-400 hover:opacity-80 transition-opacity">
+              <a
+                href="https://t.me/Techyada21"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-black dark:text-emerald-400 hover:underline hover:text-[#1A5343] dark:hover:text-emerald-300 transition-colors"
+                title="Visit @Techyada21 on Telegram"
+              >
                 @Techyada21
-              </span>
+              </a>
             </span>
           </div>
 

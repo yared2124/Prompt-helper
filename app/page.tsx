@@ -384,9 +384,15 @@ export default function Home() {
         <footer className="text-center py-8 border-t border-slate-200 dark:border-white/10">
           <p className="text-xs text-[#121E1B] dark:text-slate-400">
             promptHelper · AI-Native Prompt Architect built by{" "}
-            <span className="font-bold text-black dark:text-emerald-400">
+            <a
+              href="https://t.me/Techyada21"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-black dark:text-emerald-400 hover:underline hover:text-[#1A5343] dark:hover:text-emerald-300 transition-colors"
+              title="Visit @Techyada21 on Telegram"
+            >
               @Techyada21
-            </span>{" "}
+            </a>{" "}
             · Built with{" "}
             <span className="font-semibold text-black dark:text-slate-200">
               Next.js, TypeScript & Tailwind CSS

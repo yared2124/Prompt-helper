@@ -60,6 +60,13 @@ describe("Header", () => {
     expect(screen.getByText("@Techyada21")).toBeInTheDocument();
   });
 
+  it("links @Techyada21 to Telegram channel", () => {
+    render(<Header savedCount={0} onOpenLibrary={jest.fn()} />);
+    const link = screen.getByRole("link", { name: "@Techyada21" });
+    expect(link).toHaveAttribute("href", "https://t.me/Techyada21");
+    expect(link).toHaveAttribute("target", "_blank");
+  });
+
   it("shows badge count when savedCount > 0", () => {
     render(<Header savedCount={5} onOpenLibrary={jest.fn()} />);
     expect(screen.getByText("5")).toBeInTheDocument();
