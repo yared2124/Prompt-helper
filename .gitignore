@@ -1,0 +1,46 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Next.js build output & cache
+/.next/
+/out/
+.next/cache
+
+# Production build artifacts
+/build
+/dist
+
+# Environment variables & secrets (Protects your Gemini API key)
+.env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug and npm logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Next.js telemetry & typescript build info
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel deployment
+.vercel
+
+# Operating System files
+.DS_Store
+*.pem
+Thumbs.db
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
