@@ -14,13 +14,28 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         {/* Logo and Status */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#121E1B] dark:bg-gradient-to-tr dark:from-violet-600 dark:via-indigo-600 dark:to-cyan-500 flex items-center justify-center shadow-md shadow-black/10 dark:shadow-indigo-500/25 text-white">
-            <Sparkles size={17} />
+          <div className="relative group cursor-pointer">
+            {/* Ambient radiant aura in dark mode */}
+            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 opacity-0 dark:opacity-75 blur-[9px] group-hover:opacity-100 transition-opacity duration-500" />
+
+            {/* Squircle body with glossy bevel */}
+            <div className="relative w-10 h-10 rounded-xl bg-[#121E1B] dark:bg-gradient-to-br dark:from-sky-400 dark:via-indigo-600 dark:to-purple-700 p-[1px] shadow-md dark:shadow-[0_0_20px_rgba(99,102,241,0.4)] flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+              {/* Inner frosted glass highlight */}
+              <div className="w-full h-full rounded-[11px] bg-gradient-to-b from-white/25 via-transparent to-black/20 dark:from-white/30 dark:to-transparent flex items-center justify-center border border-white/20 dark:border-white/30 backdrop-blur-sm">
+                <Sparkles
+                  size={19}
+                  className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.7)] group-hover:rotate-12 transition-transform duration-300"
+                  fill="currentColor"
+                  fillOpacity={0.25}
+                />
+              </div>
+            </div>
           </div>
+
           <div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-base tracking-tight text-[#121E1B] dark:text-white">
-                PromptHelper
+                promptHelper
               </span>
               <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EAF2ED] dark:bg-emerald-500/20 text-[#1B4D3E] dark:text-emerald-400 border border-[#CEE0D5] dark:border-emerald-500/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#1B4D3E] dark:bg-emerald-400 animate-pulse" />

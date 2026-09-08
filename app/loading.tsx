@@ -3,8 +3,13 @@ import { Sparkles, Loader2 } from "lucide-react";
 export default function Loading() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#FAF7F2] dark:bg-[#05060f] text-[#121E1B] dark:text-white">
-      <div className="w-12 h-12 rounded-2xl bg-[#121E1B] dark:bg-gradient-to-tr dark:from-violet-600 dark:to-indigo-500 text-white flex items-center justify-center mb-4 shadow-lg shadow-black/10 animate-pulse">
-        <Sparkles size={24} className="text-amber-400" />
+      <div className="relative mb-4">
+        <div className="absolute -inset-1.5 rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-400 opacity-70 blur-[12px] animate-pulse" />
+        <div className="relative w-14 h-14 rounded-2xl bg-[#121E1B] dark:bg-gradient-to-br dark:from-sky-400 dark:via-indigo-600 dark:to-purple-700 p-[1px] shadow-lg flex items-center justify-center">
+          <div className="w-full h-full rounded-[15px] bg-gradient-to-b from-white/30 to-transparent flex items-center justify-center border border-white/30 backdrop-blur-sm">
+            <Sparkles size={26} className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" fill="currentColor" fillOpacity={0.3} />
+          </div>
+        </div>
       </div>
       <div className="flex items-center gap-2 text-sm font-semibold text-[#485450] dark:text-slate-300">
         <Loader2 size={16} className="animate-spin text-[#121E1B] dark:text-emerald-400" />
