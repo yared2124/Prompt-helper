@@ -54,9 +54,10 @@ describe("Header", () => {
     expect(screen.getByText("promptHelper")).toBeInTheDocument();
   });
 
-  it("renders the subtitle", () => {
+  it("renders the subtitle with author attribution", () => {
     render(<Header savedCount={0} onOpenLibrary={jest.fn()} />);
-    expect(screen.getByText("AI-Native Prompt Architect")).toBeInTheDocument();
+    expect(screen.getByText(/AI-Native Prompt Architect built by/i)).toBeInTheDocument();
+    expect(screen.getByText("@Techyada21")).toBeInTheDocument();
   });
 
   it("shows badge count when savedCount > 0", () => {

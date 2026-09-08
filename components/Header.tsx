@@ -42,8 +42,11 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
                 Gemini 3.7 Flash
               </span>
             </div>
-            <span className="text-[11px] text-[#717E7A] dark:text-slate-400 block leading-tight">
-              AI-Native Prompt Architect
+            <span className="text-[10px] sm:text-[11px] text-[#121E1B] dark:text-slate-300 block leading-tight font-medium">
+              AI-Native Prompt Architect built by{" "}
+              <span className="font-bold text-black dark:text-emerald-400 hover:opacity-80 transition-opacity">
+                @Techyada21
+              </span>
             </span>
           </div>
         </div>
