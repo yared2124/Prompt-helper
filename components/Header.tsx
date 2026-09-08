@@ -13,29 +13,40 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
     <header className="sticky top-0 z-40 bg-[#FAF7F2]/90 dark:bg-[#05060f]/90 border-b border-[#E7E2D8] dark:border-white/8 backdrop-blur-md transition-colors">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         {/* Brand and Subtitle */}
-        <div>
-          {/* <div className="flex items-center gap-2">
-            <span className="font-black text-lg sm:text-xl tracking-tight text-[#121E1B] dark:text-white">
-              prompt Helper
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* "P" Icon matching reference image */}
+          <div
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#121E1B] dark:bg-[#071410] border border-[#263833] dark:border-emerald-500/40 flex items-center justify-center shadow-sm shrink-0 transition-transform hover:scale-105 cursor-pointer"
+            title="promptHelper"
+            aria-label="promptHelper"
+          >
+            <span className="font-serif font-black text-sm sm:text-base text-[#E2BA70] dark:text-emerald-400 select-none leading-none">
+              P
             </span>
-            <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EAF2ED] dark:bg-emerald-500/20 text-[#1B4D3E] dark:text-emerald-400 border border-[#CEE0D5] dark:border-emerald-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#1B4D3E] dark:bg-emerald-400 animate-pulse" />
-              Gemini 3.7 Flash
+          </div>
+
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+            <span className="font-bold text-xs sm:text-sm tracking-tight text-[#121E1B] dark:text-white">
+              AI-Native Prompt Architect
             </span>
-          </div> */}
-            <span className="text-[10px] sm:text-[11px] text-[#121E1B] dark:text-slate-300 block leading-tight font-medium">
-              AI-Native Prompt Architect built by{" "}
+            <span className="text-[10px] sm:text-xs text-[#55635F] dark:text-slate-400">
+              Built by{" "}
               <a
                 href="https://t.me/Techyada21"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-bold text-black dark:text-emerald-400 hover:underline hover:text-[#1A5343] dark:hover:text-emerald-300 transition-colors"
-                title="Visit @Techyada21 on Telegram"
+                title="Visit @TechYada21 on Telegram"
               >
                 @TechYada21
               </a>
             </span>
+            <span className="hidden lg:inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#EAF2ED] dark:bg-emerald-500/20 text-[#1B4D3E] dark:text-emerald-400 border border-[#CEE0D5] dark:border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#1B4D3E] dark:bg-emerald-400 animate-pulse" />
+              Gemini 3.7 Flash
+            </span>
           </div>
+        </div>
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3">

@@ -49,20 +49,16 @@ import IconRenderer from "@/components/IconRenderer";
 import ThemeToggle from "@/components/ThemeToggle";
 
 describe("Header", () => {
-  it("renders the brand name", () => {
+  it("renders the P brand icon and title", () => {
     render(<Header savedCount={0} onOpenLibrary={jest.fn()} />);
-    expect(screen.getByText("promptHelper")).toBeInTheDocument();
+    expect(screen.getByText("P")).toBeInTheDocument();
+    expect(screen.getByText("AI-Native Prompt Architect")).toBeInTheDocument();
   });
 
-  it("renders the subtitle with author attribution", () => {
+  it("renders the author attribution with Telegram link", () => {
     render(<Header savedCount={0} onOpenLibrary={jest.fn()} />);
-    expect(screen.getByText(/AI-Native Prompt Architect built by/i)).toBeInTheDocument();
-    expect(screen.getByText("@Techyada21")).toBeInTheDocument();
-  });
-
-  it("links @Techyada21 to Telegram channel", () => {
-    render(<Header savedCount={0} onOpenLibrary={jest.fn()} />);
-    const link = screen.getByRole("link", { name: "@Techyada21" });
+    expect(screen.getByText(/Built by/i)).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: "@TechYada21" });
     expect(link).toHaveAttribute("href", "https://t.me/Techyada21");
     expect(link).toHaveAttribute("target", "_blank");
   });

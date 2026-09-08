@@ -383,7 +383,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="text-center py-8 border-t border-slate-200 dark:border-white/10">
           <p className="text-xs text-[#121E1B] dark:text-slate-400">
-            promptHelper · AI-Native Prompt Architect built by{" "}
+            prompt Helper  built by{" "}
             <a
               href="https://t.me/Techyada21"
               target="_blank"
