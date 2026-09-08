@@ -17,6 +17,20 @@ function estimateTokens(text: string): number {
   return Math.max(1, Math.ceil(text.length / 4));
 }
 
+function sanitizeInput(text: string): string {
+  // Remove dangerous non-printable ASCII control characters except tab and newline
+  return text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
+}
+
+function withTimeout<T>(promise: Promise<T>, ms = 20000): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(() => reject(new Error(`Generation timed out after ${ms / 1000}s`)), ms)
+    ),
+  ]);
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body: GenerateRequest = await request.json();
@@ -25,6 +39,21 @@ export async function POST(request: NextRequest) {
     if (!userInput || !aiModelId || !domainId) {
       return NextResponse.json(
         { error: "Missing required fields: userInput, aiModelId, domainId" },
+        { status: 400 }
+      );
+    }
+
+    const cleanInput = sanitizeInput(userInput);
+    if (cleanInput.length < 3) {
+      return NextResponse.json(
+        { error: "Input prompt is too short. Please provide at least 3 characters." },
+        { status: 400 }
+      );
+    }
+
+    if (cleanInput.length > 2000) {
+      return NextResponse.json(
+        { error: "Input prompt exceeds the 2,000 character limit." },
         { status: 400 }
       );
     }
@@ -69,7 +98,7 @@ CRITICAL STRATEGY (STANDARD BALANCED):
 
     const metaPrompt = `You are a world-class prompt architect and engineer. Your task is to transform a user's rough idea into a perfectly crafted, production-ready prompt for ${selectedAI.name} (${selectedAI.provider}${targetModel ? ` - ${targetModel}` : ""}).
 
-USER'S ORIGINAL GOAL: "${userInput}"
+USER'S ORIGINAL GOAL: "${cleanInput}"
 TARGET AI: ${selectedAI.name} (${selectedAI.provider})
 TARGET SPECIFIC MODEL: ${targetModel || selectedAI.selectedModel}
 DOMAIN: ${selectedDomain.name}
@@ -100,14 +129,17 @@ Respond with a JSON object in this exact format (no surrounding markdown, no ext
 
     for (const modelName of candidateModels) {
       try {
-        const response = await ai.models.generateContent({
-          model: modelName,
-          contents: metaPrompt,
-          config: {
-            temperature: 0.7,
-            maxOutputTokens: 1500,
-          },
-        });
+        const response = await withTimeout(
+          ai.models.generateContent({
+            model: modelName,
+            contents: metaPrompt,
+            config: {
+              temperature: 0.7,
+              maxOutputTokens: 1500,
+            },
+          }),
+          18000
+        );
         rawText = response.text ?? "";
         if (rawText) break; // success
       } catch (err) {

@@ -1,11 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Lora } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const lora = Lora({
+  subsets: ["latin"],
+  variable: "--font-lora",
+  style: ["normal", "italic"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "PromptHelper — AI Prompt Architect & Token Optimizer",
+  metadataBase: new URL("https://prompt-helper.vercel.app"),
+  title: "promptHelper — AI Prompt Architect & Token Optimizer",
   description:
     "Transform casual goals into high-impact, token-efficient prompts tailored for Claude, ChatGPT, Gemini, DeepSeek, and more. Built with Next.js 14 and Gemini 3.7 Flash.",
   keywords: [
@@ -18,18 +30,18 @@ export const metadata: Metadata = {
     "Developer Tools",
     "Next.js Portfolio",
   ],
-  authors: [{ name: "PromptHelper Team" }],
+  authors: [{ name: "promptHelper Team" }],
   openGraph: {
-    title: "PromptHelper — AI Prompt Architect & Token Optimizer",
+    title: "promptHelper — AI Prompt Architect & Token Optimizer",
     description:
       "Craft production-grade, token-efficient prompts for 10+ AI models across 12 domains. Zero fluff, strict XML/Markdown schemas, and direct AI launcher.",
     type: "website",
     locale: "en_US",
-    siteName: "PromptHelper",
+    siteName: "promptHelper",
   },
   twitter: {
     card: "summary_large_image",
-    title: "PromptHelper  AI Prompt Architect",
+    title: "promptHelper — AI Prompt Architect & Token Optimizer",
     description:
       "Craft production-grade prompts for Claude, ChatGPT, Gemini, and DeepSeek. Built with Next.js & Gemini 3.7 Flash.",
   },
@@ -62,7 +74,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body
+        className={`${inter.variable} ${lora.variable} ${inter.className} font-sans antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
