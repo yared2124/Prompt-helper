@@ -32,7 +32,7 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
                 className="font-bold text-black dark:text-emerald-400 hover:underline hover:text-[#1A5343] dark:hover:text-emerald-300 transition-colors"
                 title="Visit @Techyada21 on Telegram"
               >
-                @Techyada21
+                @TechYada21
               </a>
             </span>
           </div>
