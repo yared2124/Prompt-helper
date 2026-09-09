@@ -152,4 +152,30 @@ describe("cleanPromptFormatting", () => {
     expect(result).toContain("<role>");
     expect(result).toContain("- Rule 1");
   });
+
+  it("strips raw JSON object wrappers and unescapes literal newlines", () => {
+    const rawJson = '{\n  "enhancedPrompt": "ROLE:\\nYou are a Principal Full-Stack Engineer.\\n\\nCONTEXT:\\nDeveloper building bot.",\n  "tips": ["Tip 1"]\n}';
+    const result = cleanPromptFormatting(rawJson);
+    expect(result).not.toContain('"enhancedPrompt"');
+    expect(result).not.toContain('{"');
+    expect(result).toContain("ROLE:\nYou are a Principal Full-Stack Engineer.");
+    expect(result).toContain("CONTEXT:\nDeveloper building bot.");
+  });
+
+  it("handles truncated raw JSON without trailing closing quotes", () => {
+    const truncated = '{\n  "enhancedPrompt": "ROLE:\\nYou are an expert.\\n\\nTASK:\\nBuild API';
+    const result = cleanPromptFormatting(truncated);
+    expect(result).not.toContain('"enhancedPrompt"');
+    expect(result).toContain("ROLE:\nYou are an expert.");
+    expect(result).toContain("TASK:\nBuild API");
+  });
+
+  it("removes stray hashes like Step #1 while preserving #include", () => {
+    const input = "Step #1: Initialize project\nStep #2: Add #include <iostream>\nIssue #99";
+    const result = cleanPromptFormatting(input);
+    expect(result).toContain("Step 1: Initialize project");
+    expect(result).toContain("Step 2: Add #include <iostream>");
+    expect(result).toContain("Issue 99");
+    expect(result).not.toContain("Step #1");
+  });
 });

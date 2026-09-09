@@ -3,6 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 import { GenerateRequest, GenerateResponse } from "@/types";
 import { AI_MODELS, PROMPT_STRATEGIES } from "@/data/aiModels";
 import { DOMAINS } from "@/data/domains";
+import { cleanPromptFormatting } from "@/lib/cleanPrompt";
 
 // Lazy init — only runs at request time, not during build
 function getAIClient() {
@@ -22,9 +23,7 @@ function sanitizeInput(text: string): string {
   return text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
 }
 
-import { cleanPromptFormatting } from "@/lib/cleanPrompt";
-
-function withTimeout<T>(promise: Promise<T>, ms = 20000): Promise<T> {
+function withTimeout<T>(promise: Promise<T>, ms = 25000): Promise<T> {
   return Promise.race([
     promise,
     new Promise<T>((_, reject) =>
@@ -32,6 +31,104 @@ function withTimeout<T>(promise: Promise<T>, ms = 20000): Promise<T> {
     ),
   ]);
 }
+
+function parseGeneratedOutput(
+  rawText: string,
+  aiName: string
+): { enhancedPrompt: string; tips: string[] } {
+  const stripped = rawText
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+
+  // 1. Try standard JSON parse
+  try {
+    const parsed = JSON.parse(stripped);
+    if (parsed && typeof parsed.enhancedPrompt === "string") {
+      return {
+        enhancedPrompt: parsed.enhancedPrompt,
+        tips: Array.isArray(parsed.tips) ? parsed.tips : [],
+      };
+    }
+  } catch {}
+
+  // 2. Resilient regex extraction if output is malformed or truncated
+  const promptKeyMatch = /"enhancedPrompt"\s*:\s*"/i.exec(stripped);
+  if (promptKeyMatch) {
+    let content = stripped.slice(promptKeyMatch.index + promptKeyMatch[0].length);
+    const endMatch = /",\s*"tips"/i.exec(content);
+    if (endMatch) {
+      content = content.slice(0, endMatch.index);
+    } else {
+      content = content.replace(/"\s*(?:,\s*"tips"[\s\S]*)?\}?\s*$/i, "");
+      content = content.replace(/"\s*$/i, "");
+    }
+
+    try {
+      content = JSON.parse(`"${content.replace(/"/g, '\\"')}"`);
+    } catch {
+      content = content
+        .replace(/\\r\\n/g, "\n")
+        .replace(/\\n/g, "\n")
+        .replace(/\\"/g, '"')
+        .replace(/\\t/g, "  ")
+        .replace(/\\\\/g, "\\");
+    }
+
+    const tips: string[] = [];
+    const tipsMatch = /"tips"\s*:\s*\[([\s\S]*?)\]/i.exec(stripped);
+    if (tipsMatch) {
+      const items = tipsMatch[1].match(/"([^"\\]*(?:\\.[^"\\]*)*)"/g);
+      if (items) {
+        for (const item of items) {
+          tips.push(item.slice(1, -1).replace(/\\"/g, '"'));
+        }
+      }
+    }
+
+    if (content.trim()) {
+      return {
+        enhancedPrompt: content.trim(),
+        tips:
+          tips.length > 0
+            ? tips
+            : [
+                `Tailor the prompt variables to your specific tech stack and dependencies`,
+                `Demarcate user context from core instructions`,
+                `Specify explicit validation criteria in ${aiName}`,
+              ],
+      };
+    }
+  }
+
+  // 3. Fallback: Strip JSON wrappers and unescape text
+  return {
+    enhancedPrompt: stripped
+      .replace(/^\s*\{\s*"enhancedPrompt"\s*:\s*"?/i, "")
+      .replace(/"\s*(?:,\s*"tips"[\s\S]*)?\}?\s*$/i, "")
+      .replace(/\\n/g, "\n")
+      .replace(/\\"/g, '"')
+      .trim(),
+    tips: [
+      `Tailor the prompt variables to your specific tech stack and dependencies`,
+      `Demarcate user context from core instructions`,
+      `Specify explicit validation criteria in ${aiName}`,
+    ],
+  };
+}
+
+const MODEL_SPECIFIC_INSTRUCTIONS: Record<string, string> = {
+  claude: `Use clean XML structural tags (<role>, <context>, <instructions>, <requirements>, <output_format>). Do not use markdown hashes or asterisks. Claude adheres with supreme fidelity to clean XML tag hierarchies.`,
+  chatgpt: `Use clean uppercase section headings: ROLE:, CONTEXT:, TASK:, CONSTRAINTS:, and OUTPUT FORMAT:. Use clean hyphens ('- ') for bulleted lists.`,
+  gemini: `Use a clean hierarchical layout: SYSTEM ROLE:, CONTEXT & GROUNDING:, DIRECTIVES:, and FORMAT SPECIFICATION:. Highlight multimodality and massive context capabilities.`,
+  deepseek: `Use a rigorous reasoning structure: ROLE:, PROBLEM SPECIFICATION:, CHAIN-OF-THOUGHT & VERIFICATION PROTOCOL:, CONSTRAINTS:, and DELIVERABLE:. Emphasize step-by-step logic and mathematical/algorithmic precision.`,
+  grok: `Use direct, candid section headers: ROLE:, MISSION:, REAL-TIME & DATA CONSTRAINTS:, and OUTPUT REQUIREMENTS:. Zero filler or fluff.`,
+  mistral: `Use dense, high-efficiency technical blocks: ROLE:, TECHNICAL OBJECTIVE:, IMPLEMENTATION SPECIFICATION:, and OUTPUT FORMAT:. Concise, unambiguous European open-weight style.`,
+  llama: `Use system-instruction-ready architecture: SYSTEM:, USER INSTRUCTION:, CONSTRAINTS:, and RESPONSE TEMPLATE:. Deterministic, explicit, and direct.`,
+  perplexity: `Use research-grade architecture: ROLE:, RESEARCH INQUIRY:, SOURCE & VERIFICATION CRITERIA:, and SYNTHESIS FORMAT:. Focus on factual grounding and citation readiness.`,
+  cohere: `Use enterprise RAG architecture: ROLE:, RETRIEVAL & EXTRACTION CONTEXT:, GROUNDING RULES:, and RESPONSE STRUCTURE:. Grounded, hallucination-free output.`,
+  qwen: `Use benchmark-grade technical structure: ROLE:, TECHNICAL SCOPE:, STEP-BY-STEP CONSTRAINTS:, and STRUCTURED DELIVERABLE:. Precision syntax and multilingual mastery.`,
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -85,7 +182,7 @@ CRITICAL STRATEGY (TOKEN SAVER):
       strategyInstructions = `
 CRITICAL STRATEGY (PRODUCTION STRICT):
 - Enforce strict typing, validation schemas, and failure/error recovery cases.
-- Require edge-case handling, performance considerations ($O(n)$ bounds), and unit test requirements.
+- Require edge-case handling, performance considerations (O(n) bounds), and unit test requirements.
 - Mandate exact output structure with zero omissions.`;
     } else if (strategyId === "reasoning") {
       strategyInstructions = `
@@ -98,7 +195,11 @@ CRITICAL STRATEGY (STANDARD BALANCED):
 - Balanced clarity, explicit role definition, clear constraints, and clean formatting.`;
     }
 
-    const metaPrompt = `You are a world-class prompt architect and engineer. Your task is to transform a user's rough idea into a perfectly crafted, production-ready prompt for ${selectedAI.name} (${selectedAI.provider}${targetModel ? ` - ${targetModel}` : ""}).
+    const modelGuide =
+      MODEL_SPECIFIC_INSTRUCTIONS[selectedAI.id] ||
+      `Use clean uppercase section headings (ROLE:, CONTEXT:, TASK:, CONSTRAINTS:, OUTPUT FORMAT:) with clean hyphens ('- ') for bulleted lists.`;
+
+    const metaPrompt = `You are a world-class prompt architect and engineer. Your task is to transform a user's rough idea into a formalized, production-ready, perfectly structured prompt for ${selectedAI.name} (${selectedAI.provider}${targetModel ? ` - ${targetModel}` : ""}).
 
 USER'S ORIGINAL GOAL: "${cleanInput}"
 TARGET AI: ${selectedAI.name} (${selectedAI.provider})
@@ -107,21 +208,17 @@ DOMAIN: ${selectedDomain.name}
 ${selectedAI.name}'S STRENGTHS & IDIOMS: ${selectedAI.strengths.join(", ")}
 ${strategyInstructions}
 
-GUIDELINES FOR ${selectedAI.name}:
-- For Claude: Prefer clean XML tags (<context>, <instructions>, <requirements>, <output_format>) as Claude adheres to XML tags with supreme accuracy.
-- For ChatGPT / OpenAI: Use clean uppercase section labels (ROLE:, CONSTRAINTS:, REQUIREMENTS:, OUTPUT FORMAT:) with clean dashed lists ('- ').
-- For Gemini: Emphasize clear instruction hierarchy, role clarity, and clean structured sections.
-- For DeepSeek / Reasoning models: Emphasize chain-of-thought, mathematical/algorithmic rigor, and step-by-step logic.
-- For Open Weights (LLaMA / Mistral): Use concise, unambiguous directives and explicit format templates.
+ARCHITECTURE SPECIFICATION FOR ${selectedAI.name.toUpperCase()}:
+${modelGuide}
 
-CRITICAL OUTPUT FORMATTING RULES (STRICTLY FORBIDDEN: '#' AND '*'):
-- DO NOT use markdown heading hashes ('#', '##', '###', '####'). Never prefix titles with '#' or '###'. Use clean uppercase titles followed by a colon (e.g., ROLE:, TASK:, SPECIFICATIONS:, CONSTRAINTS:, OUTPUT FORMAT:) or XML tags.
-- DO NOT use asterisks ('*', '**', '***') anywhere. No '**bold**', no '*bullet*', no '***italics***'.
-- For bulleted lists, ALWAYS use clean hyphens ('- ') or numbered items ('1. ', '2. ').
-- For emphasis, use UPPERCASE words or clear plain phrasing, NEVER asterisks.
-- Return a clean, clear, professionally structured prompt ready to paste directly into ${selectedAI.name}.
+CRITICAL OUTPUT RULES (STRICTLY FORBIDDEN: '#' AND '*'):
+1. DO NOT use markdown heading hashes ('#', '##', '###', '####'). Never prefix titles with '#' or '###'. Use clean uppercase titles followed by a colon (e.g., ROLE:, TASK:, SPECIFICATIONS:, CONSTRAINTS:, OUTPUT FORMAT:) or XML tags for Claude.
+2. DO NOT use asterisks ('*', '**', '***') anywhere. No '**bold**', no '*bullet*', no '***italics***'.
+3. For bulleted lists, ALWAYS use clean hyphens ('- ') or numbered items ('1. ', '2. ').
+4. For emphasis, use UPPERCASE words or clear plain phrasing, NEVER asterisks.
+5. Complete the entire prompt thoroughly without cutting off or leaving sentences uncompleted.
 
-Respond with a JSON object in this exact format (no surrounding markdown, no extra commentary, just valid JSON):
+Respond with a JSON object in this exact schema:
 {
   "enhancedPrompt": "The complete engineered prompt ready to paste directly into ${selectedAI.name}",
   "tips": [
@@ -135,8 +232,10 @@ Respond with a JSON object in this exact format (no surrounding markdown, no ext
     const candidateModels = [
       "gemini-3.7-flash",
       "gemini-3.6-flash",
-      "gemini-3-flash-preview",
+      "gemini-3.8-flash",
+      "gemini-3.5-flash",
       "gemini-3.5-flash-lite",
+      "gemini-3-flash-preview",
     ];
     let rawText = "";
     let lastErr: unknown = null;
@@ -149,7 +248,27 @@ Respond with a JSON object in this exact format (no surrounding markdown, no ext
             contents: metaPrompt,
             config: {
               temperature: 0.7,
-              maxOutputTokens: 1500,
+              maxOutputTokens: 4096,
+              responseMimeType: "application/json",
+              responseJsonSchema: {
+                type: "OBJECT",
+                properties: {
+                  enhancedPrompt: {
+                    type: "STRING",
+                    description:
+                      "The complete engineered prompt ready to paste directly into the target AI model.",
+                  },
+                  tips: {
+                    type: "ARRAY",
+                    items: {
+                      type: "STRING",
+                    },
+                    description:
+                      "3 actionable tips for maximizing output quality with this model.",
+                  },
+                },
+                required: ["enhancedPrompt", "tips"],
+              },
             },
           }),
           25000
@@ -167,25 +286,8 @@ Respond with a JSON object in this exact format (no surrounding markdown, no ext
       throw lastErr;
     }
 
-    // Parse the JSON response from Gemini
-    let parsed: { enhancedPrompt: string; tips: string[] };
-    try {
-      const jsonStr = rawText
-        .replace(/```json\n?/g, "")
-        .replace(/```\n?/g, "")
-        .trim();
-      parsed = JSON.parse(jsonStr);
-    } catch {
-      parsed = {
-        enhancedPrompt: rawText,
-        tips: [
-          `Leverage ${selectedAI.name}'s specific system instruction capabilities`,
-          `Keep constraints clearly demarcated from user context`,
-          `Specify desired output format explicitly`,
-        ],
-      };
-    }
-
+    // Resiliently parse and sanitize output
+    const parsed = parseGeneratedOutput(rawText, selectedAI.name);
     const cleanedPrompt = cleanPromptFormatting(parsed.enhancedPrompt);
     const cleanedTips = (parsed.tips || []).map((t) => cleanPromptFormatting(t));
 
@@ -198,10 +300,19 @@ Respond with a JSON object in this exact format (no surrounding markdown, no ext
       tokensBefore,
       tokensAfter,
       metrics: {
-        roleDetected: cleanedPrompt.toLowerCase().includes("you are") || cleanedPrompt.toLowerCase().includes("role"),
-        constraintsDetected: cleanedPrompt.includes("<") || cleanedPrompt.toLowerCase().includes("constraint") || cleanedPrompt.toLowerCase().includes("must"),
-        outputFormatDetected: cleanedPrompt.toLowerCase().includes("format") || cleanedPrompt.toLowerCase().includes("schema"),
-        savingsPercentage: Math.round(((tokensAfter - tokensBefore) / Math.max(tokensBefore, 1)) * 100),
+        roleDetected:
+          cleanedPrompt.toLowerCase().includes("you are") ||
+          cleanedPrompt.toLowerCase().includes("role"),
+        constraintsDetected:
+          cleanedPrompt.includes("<") ||
+          cleanedPrompt.toLowerCase().includes("constraint") ||
+          cleanedPrompt.toLowerCase().includes("must"),
+        outputFormatDetected:
+          cleanedPrompt.toLowerCase().includes("format") ||
+          cleanedPrompt.toLowerCase().includes("schema"),
+        savingsPercentage: Math.round(
+          ((tokensAfter - tokensBefore) / Math.max(tokensBefore, 1)) * 100
+        ),
       },
     };
 
