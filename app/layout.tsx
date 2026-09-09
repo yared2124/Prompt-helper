@@ -55,19 +55,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        {/* Anti-Flicker Theme Script: defaults to light mode unless dark was explicitly saved */}
+        {/* Anti-Flicker Theme Script: defaults to dark mode unless light was explicitly saved */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
                   var saved = localStorage.getItem('prompthelper_theme');
-                  if (saved === 'dark') {
-                    document.documentElement.classList.add('dark');
-                  } else {
+                  if (saved === 'light') {
                     document.documentElement.classList.remove('dark');
+                  } else {
+                    document.documentElement.classList.add('dark');
                   }
                 } catch (e) {}
               })();
