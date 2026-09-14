@@ -70,3 +70,18 @@ export interface GenerateResponse {
   tokensAfter: number;
   metrics?: PromptMetrics;
 }
+
+export interface TestPromptRequest {
+  prompt: string;
+  originalInput?: string;
+  modelId?: string;
+  compareOriginal?: boolean;
+}
+
+export interface TestPromptResponse {
+  response: string;
+  originalResponse?: string;
+  executionTimeMs: number;
+  tokensUsed: number;
+}
+
