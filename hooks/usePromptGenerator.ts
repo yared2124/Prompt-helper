@@ -34,10 +34,14 @@ export function usePromptGenerator() {
     }
   }, []);
 
+  const updateResult = useCallback((newResult: GenerateResponse) => {
+    setResult(newResult);
+  }, []);
+
   const reset = useCallback(() => {
     setResult(null);
     setError(null);
   }, []);
 
-  return { result, isLoading, error, generate, reset };
+  return { result, isLoading, error, generate, reset, updateResult };
 }

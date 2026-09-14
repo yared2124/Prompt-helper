@@ -33,6 +33,11 @@ import {
   Flame,
   FileCode2,
   HelpCircle,
+  Scissors,
+  FileCheck,
+  Sparkles,
+  CheckCircle2,
+  ListPlus,
   LucideProps,
 } from "lucide-react";
 
@@ -72,6 +77,13 @@ const ICON_MAP: Record<string, React.FC<LucideProps>> = {
   MessageSquareCode,
   Flame,
   FileCode2,
+
+  // Refinement chip icons
+  Scissors,
+  FileCheck,
+  Sparkles,
+  CheckCircle2,
+  ListPlus,
 };
 
 interface IconRendererProps extends LucideProps {

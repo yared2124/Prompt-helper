@@ -38,7 +38,8 @@ export default function Home() {
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  const { result, isLoading, error, generate, reset } = usePromptGenerator();
+  const { result, isLoading, error, generate, reset, updateResult } =
+    usePromptGenerator();
   const { prompts, savePrompt, deletePrompt, clearAll, importPrompts } =
     useLibrary();
 
@@ -319,6 +320,7 @@ export default function Home() {
               originalInput={userInput}
               onSave={handleSave}
               onRegenerate={handleGenerate}
+              onUpdateResult={updateResult}
               isLoading={isLoading}
               onShowToast={addToast}
             />

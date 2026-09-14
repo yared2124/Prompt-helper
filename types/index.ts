@@ -85,3 +85,26 @@ export interface TestPromptResponse {
   tokensUsed: number;
 }
 
+export interface RefineChip {
+  id: string;
+  label: string;
+  iconName: string;
+  instruction: string;
+  description: string;
+}
+
+export interface RefinePromptRequest {
+  currentPrompt: string;
+  refinementInstruction: string;
+  aiModelId?: string;
+  domainId?: string;
+}
+
+export interface RefinePromptResponse {
+  enhancedPrompt: string;
+  tips: string[];
+  tokensBefore: number;
+  tokensAfter: number;
+  metrics?: PromptMetrics;
+}
+

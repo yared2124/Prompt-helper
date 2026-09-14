@@ -16,9 +16,14 @@ import {
   Terminal,
   Clock,
   Sparkles,
+  Undo2,
+  Wand2,
 } from "lucide-react";
 
 import { cleanPromptFormatting } from "@/lib/cleanPrompt";
+import { REFINEMENT_CHIPS } from "@/data/refinementChips";
+import IconRenderer from "@/components/IconRenderer";
+import { RefinePromptResponse } from "@/types";
 
 interface PromptOutputProps {
   result: GenerateResponse | null;
@@ -27,6 +32,7 @@ interface PromptOutputProps {
   originalInput: string;
   onSave: () => void;
   onRegenerate: () => void;
+  onUpdateResult?: (newResult: GenerateResponse) => void;
   isLoading: boolean;
   onShowToast: (message: string, type: "success" | "info") => void;
 }
@@ -38,6 +44,7 @@ export default function PromptOutput({
   originalInput,
   onSave,
   onRegenerate,
+  onUpdateResult,
   isLoading,
   onShowToast,
 }: PromptOutputProps) {
@@ -50,6 +57,10 @@ export default function PromptOutput({
     useState<TestPromptResponse | null>(null);
   const [showOriginalComparison, setShowOriginalComparison] = useState(false);
   const [copiedOutput, setCopiedOutput] = useState(false);
+  const [history, setHistory] = useState<GenerateResponse[]>([]);
+  const [isRefining, setIsRefining] = useState(false);
+  const [activeRefineChipId, setActiveRefineChipId] = useState<string | null>(null);
+  const [customInstruction, setCustomInstruction] = useState("");
 
   const displayPrompt = result?.enhancedPrompt
     ? cleanPromptFormatting(result.enhancedPrompt)
@@ -155,6 +166,61 @@ export default function PromptOutput({
     } catch {
       onShowToast("Failed to copy output", "info");
     }
+  };
+
+  const handleRefine = async (instruction: string, chipId?: string) => {
+    if (!displayPrompt || !instruction.trim() || isRefining) return;
+    setIsRefining(true);
+    if (chipId) setActiveRefineChipId(chipId);
+
+    try {
+      const res = await fetch("/api/refine", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPrompt: displayPrompt,
+          refinementInstruction: instruction.trim(),
+          aiModelId: selectedAI?.id,
+          domainId: undefined,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to refine prompt");
+      }
+
+      const data: RefinePromptResponse = await res.json();
+      if (result) {
+        setHistory((prev) => [...prev, result]);
+      }
+      const newResponse: GenerateResponse = {
+        enhancedPrompt: data.enhancedPrompt,
+        tips: data.tips,
+        tokensBefore: data.tokensBefore,
+        tokensAfter: data.tokensAfter,
+        metrics: data.metrics,
+      };
+      onUpdateResult?.(newResponse);
+      setCustomInstruction("");
+      setSandboxResult(null);
+      onShowToast("Prompt refined successfully with AI!", "success");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to refine prompt";
+      onShowToast(msg, "info");
+    } finally {
+      setIsRefining(false);
+      setActiveRefineChipId(null);
+    }
+  };
+
+  const handleUndoRefine = () => {
+    if (history.length === 0) return;
+    const previous = history[history.length - 1];
+    setHistory((prev) => prev.slice(0, -1));
+    onUpdateResult?.(previous);
+    setSandboxResult(null);
+    onShowToast("Reverted to previous prompt version.", "info");
   };
 
   const expansionPercent = result
@@ -388,7 +454,7 @@ export default function PromptOutput({
 
         {/* Tab 1: Optimized Prompt Display */}
         {activeTab === "prompt" && (
-          <div className="p-5 bg-white dark:bg-transparent">
+          <div className="p-5 bg-white dark:bg-transparent space-y-4">
             {isLoading ? (
               <div className="space-y-3 py-4">
                 <div className="h-4 bg-[#F2EFE8] dark:bg-white/10 rounded w-3/4 animate-pulse" />
@@ -397,9 +463,114 @@ export default function PromptOutput({
                 <div className="h-4 bg-[#F2EFE8] dark:bg-white/10 rounded w-2/3 animate-pulse" />
               </div>
             ) : (
-              <pre className="text-xs sm:text-sm font-mono text-[#121E1B] dark:text-slate-100 leading-relaxed whitespace-pre-wrap select-all">
-                {displayPrompt}
-              </pre>
+              <>
+                <pre className="text-xs sm:text-sm font-mono text-[#121E1B] dark:text-slate-100 leading-relaxed whitespace-pre-wrap select-all">
+                  {displayPrompt}
+                </pre>
+
+                {/* Refine with AI Section */}
+                <div className="pt-4 border-t border-[#E7E2D8] dark:border-white/10 space-y-3">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <span className="flex items-center gap-1.5 text-xs font-bold text-[#121E1B] dark:text-white uppercase tracking-wider">
+                        <Sparkles size={14} className="text-emerald-500" />
+                        Refine with AI
+                      </span>
+                      {history.length > 0 && (
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono font-bold">
+                          v{history.length + 1}
+                        </span>
+                      )}
+                    </div>
+
+                    {history.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={handleUndoRefine}
+                        disabled={isRefining}
+                        className="flex items-center gap-1 text-xs text-[#62736E] dark:text-slate-400 hover:text-[#121E1B] dark:hover:text-white transition-colors cursor-pointer disabled:opacity-50"
+                        title="Revert to previous prompt version"
+                      >
+                        <Undo2 size={12} />
+                        <span>Undo last change (v{history.length})</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Refine Preset Chips */}
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {REFINEMENT_CHIPS.map((chip) => {
+                      const isThisChipActive =
+                        isRefining && activeRefineChipId === chip.id;
+                      return (
+                        <button
+                          key={chip.id}
+                          type="button"
+                          onClick={() => handleRefine(chip.instruction, chip.id)}
+                          disabled={isRefining}
+                          title={chip.description}
+                          className={`flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border transition-all cursor-pointer font-medium disabled:opacity-50 ${
+                            isThisChipActive
+                              ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-600 dark:text-emerald-300"
+                              : "bg-[#FAF7F2] dark:bg-white/[0.03] border-[#E7E2D8] dark:border-white/10 text-[#2C3834] dark:text-slate-300 hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-700 dark:hover:text-emerald-300"
+                          }`}
+                        >
+                          {isThisChipActive ? (
+                            <RefreshCw size={12} className="animate-spin text-emerald-500" />
+                          ) : (
+                            <IconRenderer
+                              name={chip.iconName}
+                              size={12}
+                              className="text-[#62736E] dark:text-slate-400"
+                            />
+                          )}
+                          <span>{chip.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Custom Instruction Input */}
+                  <div className="flex items-center gap-2 pt-1">
+                    <input
+                      type="text"
+                      value={customInstruction}
+                      onChange={(e) => setCustomInstruction(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (
+                          e.key === "Enter" &&
+                          customInstruction.trim() &&
+                          !isRefining
+                        ) {
+                          e.preventDefault();
+                          handleRefine(customInstruction);
+                        }
+                      }}
+                      placeholder="Custom instruction... (e.g. 'Add unit tests in Jest' or 'Include TypeScript interfaces')"
+                      disabled={isRefining}
+                      className="flex-1 text-xs px-3 py-2 rounded-xl bg-[#FAF7F2] dark:bg-white/[0.03] border border-[#E7E2D8] dark:border-white/10 text-[#121E1B] dark:text-white placeholder-[#788884] dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all disabled:opacity-50"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRefine(customInstruction)}
+                      disabled={isRefining || !customInstruction.trim()}
+                      className="flex items-center gap-1.5 text-xs px-3.5 py-2 rounded-xl bg-[#121E1B] dark:bg-emerald-600 hover:bg-[#1E332E] dark:hover:bg-emerald-500 text-white font-semibold transition-all disabled:opacity-40 cursor-pointer shadow-sm shrink-0"
+                    >
+                      {isRefining && !activeRefineChipId ? (
+                        <>
+                          <RefreshCw size={12} className="animate-spin" />
+                          <span>Refining...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Wand2 size={12} />
+                          <span>Refine</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
           </div>
         )}

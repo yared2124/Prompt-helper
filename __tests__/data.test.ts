@@ -91,3 +91,28 @@ describe("PROMPT_STRATEGIES data integrity", () => {
     expect(s.benefit).toBeTruthy();
   });
 });
+
+import { REFINEMENT_CHIPS } from "@/data/refinementChips";
+
+describe("REFINEMENT_CHIPS data integrity", () => {
+  it("has at least 4 refinement chips", () => {
+    expect(REFINEMENT_CHIPS.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it("every refinement chip has unique id", () => {
+    const ids = REFINEMENT_CHIPS.map((c) => c.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it.each(
+    REFINEMENT_CHIPS.map((c) => [c.id, c])
+  )("chip '%s' has all required fields", (_id, chip) => {
+    const c = chip as typeof REFINEMENT_CHIPS[0];
+    expect(c.id).toBeTruthy();
+    expect(c.label).toBeTruthy();
+    expect(c.iconName).toBeTruthy();
+    expect(c.instruction).toBeTruthy();
+    expect(c.description).toBeTruthy();
+  });
+});
+
