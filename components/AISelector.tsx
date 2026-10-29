@@ -13,76 +13,15 @@ interface AISelectorProps {
   selectedVariant?: string;
 }
 
-const MODEL_THEMES: Record<
-  string,
-  {
-    darkText: string;
-    darkBg: string;
-    darkBorder: string;
-    glow: string;
-  }
-> = {
-  claude: {
-    darkText: "dark:text-amber-400",
-    darkBg: "dark:bg-amber-500/15",
-    darkBorder: "dark:border-amber-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(245,158,11,0.2)] dark:border-amber-500/50",
-  },
-  chatgpt: {
-    darkText: "dark:text-emerald-400",
-    darkBg: "dark:bg-emerald-500/15",
-    darkBorder: "dark:border-emerald-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(16,185,129,0.2)] dark:border-emerald-500/50",
-  },
-  gemini: {
-    darkText: "dark:text-blue-400",
-    darkBg: "dark:bg-blue-500/15",
-    darkBorder: "dark:border-blue-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(59,130,246,0.2)] dark:border-blue-500/50",
-  },
-  deepseek: {
-    darkText: "dark:text-cyan-400",
-    darkBg: "dark:bg-cyan-500/15",
-    darkBorder: "dark:border-cyan-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(6,182,212,0.2)] dark:border-cyan-500/50",
-  },
-  grok: {
-    darkText: "dark:text-yellow-400",
-    darkBg: "dark:bg-yellow-500/15",
-    darkBorder: "dark:border-yellow-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(234,179,8,0.2)] dark:border-yellow-500/50",
-  },
-  mistral: {
-    darkText: "dark:text-orange-400",
-    darkBg: "dark:bg-orange-500/15",
-    darkBorder: "dark:border-orange-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(249,115,22,0.2)] dark:border-orange-500/50",
-  },
-  llama: {
-    darkText: "dark:text-indigo-400",
-    darkBg: "dark:bg-indigo-500/15",
-    darkBorder: "dark:border-indigo-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(99,102,241,0.2)] dark:border-indigo-500/50",
-  },
-  perplexity: {
-    darkText: "dark:text-teal-400",
-    darkBg: "dark:bg-teal-500/15",
-    darkBorder: "dark:border-teal-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(20,184,166,0.2)] dark:border-teal-500/50",
-  },
-  cohere: {
-    darkText: "dark:text-rose-400",
-    darkBg: "dark:bg-rose-500/15",
-    darkBorder: "dark:border-rose-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(244,63,94,0.2)] dark:border-rose-500/50",
-  },
-  qwen: {
-    darkText: "dark:text-purple-400",
-    darkBg: "dark:bg-purple-500/15",
-    darkBorder: "dark:border-purple-500/30",
-    glow: "dark:shadow-[0_0_16px_rgba(168,85,247,0.2)] dark:border-purple-500/50",
-  },
+const NEUTRAL = {
+  darkText: "dark:text-zinc-100",
+  darkBg: "dark:bg-zinc-800",
+  darkBorder: "dark:border-zinc-600",
+  glow: "",
 };
+const MODEL_THEMES: Record<string, typeof NEUTRAL> = new Proxy({}, {
+  get: () => NEUTRAL,
+});
 
 export default function AISelector({
   models,
@@ -123,7 +62,7 @@ export default function AISelector({
       {/* Header & Search */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2 font-serif">
+          <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2">
             <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-gradient-to-tr dark:from-emerald-600 dark:to-teal-500 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
               1
             </span>
@@ -145,7 +84,7 @@ export default function AISelector({
             placeholder="Search AI models..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-white dark:bg-white/5 border border-[#E7E2D8] dark:border-white/10 text-[#121E1B] dark:text-slate-200 placeholder-[#98A6A2] focus:outline-none focus:border-[#121E1B] dark:focus:border-emerald-500 transition-colors shadow-[0_1px_4px_rgba(20,30,25,0.02)]"
+            className="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-white dark:bg-white/5 border border-[#E7E2D8] dark:border-white/10 text-[#121E1B] dark:text-slate-200 placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[#121E1B] dark:focus:border-emerald-500 transition-colors shadow-[0_1px_4px_rgba(20,30,25,0.02)]"
           />
         </div>
       </div>
@@ -171,12 +110,7 @@ export default function AISelector({
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
         {filteredModels.map((model) => {
           const isSelected = selected?.id === model.id;
-          const theme = MODEL_THEMES[model.id] || {
-            darkText: "dark:text-violet-400",
-            darkBg: "dark:bg-violet-500/15",
-            darkBorder: "dark:border-violet-500/30",
-            glow: "dark:shadow-[0_0_16px_rgba(139,92,246,0.2)] dark:border-violet-500/50",
-          };
+          const theme = MODEL_THEMES[model.id];
 
           return (
             <button

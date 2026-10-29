@@ -1,83 +1,56 @@
 import type { Metadata } from "next";
-import { Inter, Lora } from "next/font/google";
+import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
-const inter = Inter({
+const sans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
   display: "swap",
 });
-
-const lora = Lora({
+const mono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-lora",
-  style: ["normal", "italic"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://prompt-helper.vercel.app"),
-  title: "promptHelper — AI Prompt Architect & Token Optimizer",
+  title: "promptHelper",
   description:
-    "Transform casual goals into high-impact, token-efficient prompts tailored for Claude, ChatGPT, Gemini, DeepSeek, and more. Built with Next.js 14 and Gemini 3.7 Flash.",
-  keywords: [
-    "Prompt Engineering",
-    "Token Optimizer",
-    "Claude Prompts",
-    "ChatGPT Prompt Helper",
-    "Gemini 3.7 Flash",
-    "DeepSeek R1 Prompts",
-    "Developer Tools",
-    "Next.js Portfolio",
-  ],
-  authors: [{ name: "promptHelper Team" }],
+    "Turn a rough request into a structured prompt for Claude, ChatGPT, Gemini, DeepSeek and others.",
   openGraph: {
-    title: "promptHelper — AI Prompt Architect & Token Optimizer",
+    title: "promptHelper",
     description:
-      "Craft production-grade, token-efficient prompts for 10+ AI models across 12 domains. Zero fluff, strict XML/Markdown schemas, and direct AI launcher.",
+      "Turn a rough request into a structured prompt for the model you use.",
     type: "website",
-    locale: "en_US",
     siteName: "promptHelper",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "promptHelper — AI Prompt Architect & Token Optimizer",
-    description:
-      "Craft production-grade prompts for Claude, ChatGPT, Gemini, and DeepSeek. Built with Next.js & Gemini 3.7 Flash.",
-  },
+  twitter: { card: "summary_large_image", title: "promptHelper" },
 };
+
+const themeScript = `
+(function () {
+  try {
+    var saved = localStorage.getItem('prompthelper_theme');
+    var dark = saved ? saved === 'dark'
+      : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.classList.toggle('dark', dark);
+  } catch (e) {}
+})();`;
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Anti-Flicker Theme Script: defaults to dark mode unless light was explicitly saved */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var saved = localStorage.getItem('prompthelper_theme');
-                  if (saved === 'light') {
-                    document.documentElement.classList.remove('dark');
-                  } else {
-                    document.documentElement.classList.add('dark');
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body
-        className={`${inter.variable} ${lora.variable} ${inter.className} font-sans antialiased`}
-      >
+      <body className={`${sans.variable} ${mono.variable} font-sans antialiased`}>
         {children}
         <SpeedInsights />
         <Analytics />

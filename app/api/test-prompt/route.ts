@@ -1,68 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
 import { TestPromptRequest, TestPromptResponse } from "@/types";
-
-function getAIClient() {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not set in .env.local");
-  }
-  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-}
-
-function estimateTokens(text: string): number {
-  return Math.max(1, Math.ceil(text.length / 4));
-}
-
-function withTimeout<T>(promise: Promise<T>, ms = 25000): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error(`Execution timed out after ${ms / 1000}s`)), ms)
-    ),
-  ]);
-}
-
-const CANDIDATE_MODELS = [
-  "gemini-3.7-flash",
-  "gemini-3.6-flash",
-  "gemini-3.8-flash",
-  "gemini-3.5-flash",
-  "gemini-3.5-flash-lite",
-  "gemini-3-flash-preview",
-];
+import {
+  estimateTokens,
+  generateWithFallback,
+  rateLimited,
+} from "@/lib/gemini";
 
 async function executePrompt(promptText: string): Promise<string> {
-  const ai = getAIClient();
-  let lastErr: unknown = null;
-
-  for (const modelName of CANDIDATE_MODELS) {
-    try {
-      const response = await withTimeout(
-        ai.models.generateContent({
-          model: modelName,
-          contents: promptText,
-          config: {
-            temperature: 0.7,
-            maxOutputTokens: 3000,
-          },
-        }),
-        25000
-      );
-
-      const text = response.text?.trim();
-      if (text) return text;
-    } catch (err) {
-      lastErr = err;
-      const errMsg = err instanceof Error ? err.message : String(err);
-      console.warn(`Sandbox model ${modelName} issue: ${errMsg}. Trying fallback...`);
-    }
-  }
-
-  if (lastErr) throw lastErr;
-  return "No response generated.";
+  const response = await generateWithFallback(promptText, {
+    temperature: 0.7,
+    maxOutputTokens: 3000,
+  });
+  return response.trim();
 }
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  if (rateLimited(ip)) {
+    return NextResponse.json(
+      { error: "Too many requests. Try again in a minute." },
+      { status: 429 }
+    );
+  }
+
   const startTime = performance.now();
 
   try {

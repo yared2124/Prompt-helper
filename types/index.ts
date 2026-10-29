@@ -37,7 +37,7 @@ export interface PromptMetrics {
   roleDetected: boolean;
   constraintsDetected: boolean;
   outputFormatDetected: boolean;
-  savingsPercentage: number;
+  tokenDelta: number;
 }
 
 export interface GeneratedPrompt {

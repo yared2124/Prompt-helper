@@ -104,7 +104,7 @@ export default function DomainSelector({
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2 font-serif">
+          <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2">
           <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-gradient-to-tr dark:from-emerald-600 dark:to-teal-500 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
             2
           </span>

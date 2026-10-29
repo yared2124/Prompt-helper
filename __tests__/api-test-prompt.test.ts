@@ -18,6 +18,8 @@ jest.mock("@google/genai", () => ({
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/test-prompt/route";
 
+let requestCount = 1;
+
 beforeAll(() => {
   process.env.GEMINI_API_KEY = "test-api-key-for-jest";
 });
@@ -29,15 +31,32 @@ beforeEach(() => {
   });
 });
 
-function makeRequest(body: Record<string, unknown>): NextRequest {
+function makeRequest(
+  body: Record<string, unknown>,
+  ip = `203.0.113.${requestCount++}`
+): NextRequest {
   return new NextRequest("http://localhost:3000/api/test-prompt", {
     method: "POST",
     body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "x-forwarded-for": ip },
   });
 }
 
 describe("POST /api/test-prompt", () => {
+  it("returns 429 after the per-IP request limit is exceeded", async () => {
+    const ip = "203.0.113.200";
+    for (let i = 0; i < 10; i += 1) {
+      const res = await POST(makeRequest({}, ip));
+      expect(res.status).toBe(400);
+    }
+
+    const res = await POST(makeRequest({}, ip));
+    expect(res.status).toBe(429);
+    await expect(res.json()).resolves.toEqual({
+      error: "Too many requests. Try again in a minute.",
+    });
+  });
+
   describe("Validation", () => {
     it("returns 400 when prompt is missing", async () => {
       const res = await POST(makeRequest({}));

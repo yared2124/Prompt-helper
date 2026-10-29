@@ -54,7 +54,7 @@ export default function PromptInput({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2 font-serif">
+          <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2">
             <span className="w-6 h-6 rounded-lg bg-[#121E1B] dark:bg-gradient-to-tr dark:from-emerald-600 dark:to-teal-500 text-white flex items-center justify-center text-xs font-sans font-bold shadow-sm">
               3
             </span>
@@ -90,7 +90,7 @@ export default function PromptInput({
               : 'e.g., "Write a high-performance Python script to parse large JSON logs and export analytics to CSV"...'
           }
           rows={5}
-          className="w-full bg-transparent text-[#121E1B] dark:text-slate-100 placeholder-[#98A6A2] p-4 text-sm leading-relaxed resize-none focus:outline-none"
+          className="w-full bg-transparent text-[#121E1B] dark:text-slate-100 placeholder:text-[var(--text-muted)] p-4 text-sm leading-relaxed resize-none focus:outline-none"
         />
 
         {/* Bottom meta strip */}
@@ -102,7 +102,7 @@ export default function PromptInput({
             <span className="hidden sm:inline text-[#C4CFCB] dark:text-slate-600">
               •
             </span>
-            <span className="hidden sm:inline flex items-center gap-1 font-mono text-[#44524E] dark:text-slate-300 font-medium">
+            <span className="hidden sm:flex items-center gap-1 font-mono text-[#44524E] dark:text-slate-300 font-medium">
               <Zap size={11} className="text-amber-500 dark:text-amber-400" /> ~{estimatedTokens} input tokens
             </span>
           </div>
@@ -133,18 +133,17 @@ export default function PromptInput({
         disabled={!canGenerate}
         className={`w-full py-3.5 px-6 rounded-xl font-bold text-sm flex items-center justify-center gap-2.5 transition-all duration-200 ${
           canGenerate
-            ? "bg-[#121E1B] hover:bg-[#1E332E] text-white shadow-lg shadow-black/10 dark:bg-gradient-to-r dark:from-emerald-600 dark:via-teal-600 dark:to-emerald-600 dark:hover:from-emerald-500 dark:hover:to-teal-500 dark:shadow-[0_0_25px_rgba(16,185,129,0.35)] ring-pulse cursor-pointer"
-            : "bg-[#EFECE4] dark:bg-white/5 text-[#98A6A2] dark:text-slate-600 cursor-not-allowed border border-[#E7E2D8] dark:border-white/5"
+            ? "bg-zinc-900 text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300 cursor-pointer"
+            : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed border border-zinc-200 dark:border-zinc-700"
         }`}
       >
         {isLoading ? (
           <>
             <Loader2 size={18} className="animate-spin text-white" />
-            <span>Architecting prompt with Gemini 3.7 Flash...</span>
+            <span>Generating…</span>
           </>
         ) : (
           <>
-            <Zap size={18} className="text-amber-400 dark:text-emerald-400" />
             <span>
               Generate Optimized Prompt
               {selectedAI ? ` for ${selectedAI.name}` : ""}

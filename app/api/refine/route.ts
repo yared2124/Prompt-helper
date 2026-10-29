@@ -1,33 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
 import { RefinePromptRequest, RefinePromptResponse } from "@/types";
 import { AI_MODELS } from "@/data/aiModels";
 import { DOMAINS } from "@/data/domains";
 import { cleanPromptFormatting } from "@/lib/cleanPrompt";
-
-function getAIClient() {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not set in .env.local");
-  }
-  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-}
-
-function estimateTokens(text: string): number {
-  return Math.max(1, Math.ceil(text.length / 4));
-}
-
-function sanitizeInput(text: string): string {
-  return text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
-}
-
-function withTimeout<T>(promise: Promise<T>, ms = 25000): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error(`Refinement timed out after ${ms / 1000}s`)), ms)
-    ),
-  ]);
-}
+import {
+  estimateTokens,
+  generateWithFallback,
+  rateLimited,
+  sanitizeInput,
+} from "@/lib/gemini";
 
 function parseGeneratedOutput(
   rawText: string,
@@ -114,16 +95,15 @@ function parseGeneratedOutput(
   };
 }
 
-const CANDIDATE_MODELS = [
-  "gemini-3.7-flash",
-  "gemini-3.6-flash",
-  "gemini-3.8-flash",
-  "gemini-3.5-flash",
-  "gemini-3.5-flash-lite",
-  "gemini-3-flash-preview",
-];
-
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  if (rateLimited(ip)) {
+    return NextResponse.json(
+      { error: "Too many requests. Try again in a minute." },
+      { status: 429 }
+    );
+  }
+
   try {
     const body: RefinePromptRequest = await request.json();
     const { currentPrompt, refinementInstruction, aiModelId, domainId } = body;
@@ -218,51 +198,26 @@ Respond with a JSON object in this exact schema:
   ]
 }`;
 
-    const ai = getAIClient();
-    let rawText = "";
-    let lastErr: unknown = null;
-
-    for (const modelName of CANDIDATE_MODELS) {
-      try {
-        const response = await withTimeout(
-          ai.models.generateContent({
-            model: modelName,
-            contents: metaPrompt,
-            config: {
-              temperature: 0.7,
-              maxOutputTokens: 4096,
-              responseMimeType: "application/json",
-              responseJsonSchema: {
-                type: "OBJECT",
-                properties: {
-                  enhancedPrompt: {
-                    type: "STRING",
-                    description: "The refined engineered prompt.",
-                  },
-                  tips: {
-                    type: "ARRAY",
-                    items: { type: "STRING" },
-                    description: "3 actionable tips reflecting the refinement.",
-                  },
-                },
-                required: ["enhancedPrompt", "tips"],
-              },
-            },
-          }),
-          25000
-        );
-        rawText = response.text ?? "";
-        if (rawText) break;
-      } catch (err) {
-        lastErr = err;
-        const errMsg = err instanceof Error ? err.message : String(err);
-        console.warn(`Refine model ${modelName} issue: ${errMsg}. Trying fallback...`);
-      }
-    }
-
-    if (!rawText && lastErr) {
-      throw lastErr;
-    }
+    const rawText = await generateWithFallback(metaPrompt, {
+      temperature: 0.7,
+      maxOutputTokens: 4096,
+      responseMimeType: "application/json",
+      responseJsonSchema: {
+        type: "object",
+        properties: {
+          enhancedPrompt: {
+            type: "string",
+            description: "The refined engineered prompt.",
+          },
+          tips: {
+            type: "array",
+            items: { type: "string" },
+            description: "3 actionable tips reflecting the refinement.",
+          },
+        },
+        required: ["enhancedPrompt", "tips"],
+      },
+    });
 
     const parsed = parseGeneratedOutput(rawText, aiName);
     const cleanedPrompt = cleanPromptFormatting(parsed.enhancedPrompt);
@@ -287,7 +242,7 @@ Respond with a JSON object in this exact schema:
         outputFormatDetected:
           cleanedPrompt.toLowerCase().includes("format") ||
           cleanedPrompt.toLowerCase().includes("schema"),
-        savingsPercentage: Math.round(
+        tokenDelta: Math.round(
           ((tokensAfter - tokensBefore) / Math.max(tokensBefore, 1)) * 100
         ),
       },

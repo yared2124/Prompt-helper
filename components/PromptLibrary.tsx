@@ -107,7 +107,7 @@ export default function PromptLibrary({
         <div className="px-5 py-4 border-b border-[#E7E2D8] dark:border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <BookmarkCheck size={20} className="text-[#121E1B] dark:text-emerald-400" />
-            <h3 className="font-bold text-base text-[#121E1B] dark:text-white font-serif">
+            <h3 className="font-bold text-base text-[#121E1B] dark:text-white">
               Prompt Library
             </h3>
             <span className="text-xs px-2 py-0.5 rounded-full bg-[#EFECE4] dark:bg-emerald-500/20 font-mono text-[#121E1B] dark:text-emerald-300 font-semibold">
@@ -160,7 +160,7 @@ export default function PromptLibrary({
               placeholder="Search prompts or domain..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-white dark:bg-white/5 border border-[#E7E2D8] dark:border-white/10 text-[#121E1B] dark:text-slate-200 placeholder-[#98A6A2] focus:outline-none focus:border-[#121E1B]"
+              className="w-full pl-8 pr-3 py-1.5 rounded-xl text-xs bg-white dark:bg-white/5 border border-[#E7E2D8] dark:border-white/10 text-[#121E1B] dark:text-slate-200 placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[#121E1B]"
             />
           </div>
 

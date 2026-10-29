@@ -7,28 +7,12 @@
  */
 
 import { cleanPromptFormatting } from "@/lib/cleanPrompt";
-
-// ─── Replicas of pure functions from app/api/generate/route.ts ────────────────
-
-function estimateTokens(text: string): number {
-  return Math.max(1, Math.ceil(text.length / 4));
-}
-
-function sanitizeInput(text: string): string {
-  return text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
-}
-
-function withTimeout<T>(promise: Promise<T>, ms = 20000): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) =>
-      setTimeout(
-        () => reject(new Error(`Generation timed out after ${ms / 1000}s`)),
-        ms
-      )
-    ),
-  ]);
-}
+import {
+  estimateTokens,
+  rateLimited,
+  sanitizeInput,
+  withTimeout,
+} from "@/lib/gemini";
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
@@ -106,12 +90,21 @@ describe("withTimeout", () => {
     );
     const p = withTimeout(slow, 1000);
     jest.advanceTimersByTime(1500);
-    await expect(p).rejects.toThrow("Generation timed out after 1s");
+    await expect(p).rejects.toThrow("Timed out after 1s");
   });
 
   it("rejects with original error when promise rejects before timeout", async () => {
     const failing = Promise.reject(new Error("API error"));
     await expect(withTimeout(failing, 5000)).rejects.toThrow("API error");
+  });
+});
+
+describe("rateLimited", () => {
+  it("allows up to the configured limit and rejects additional requests", () => {
+    const ip = `rate-limit-test-${Date.now()}`;
+    expect(rateLimited(ip, 2)).toBe(false);
+    expect(rateLimited(ip, 2)).toBe(false);
+    expect(rateLimited(ip, 2)).toBe(true);
   });
 });
 
@@ -124,11 +117,10 @@ describe("cleanPromptFormatting", () => {
     expect(result).toContain("GOAL:");
   });
 
-  it("removes bold and italic asterisks", () => {
-    const input = "Use **TypeScript** with *strict* mode and ***full typing***.";
+  it("removes bold markup while preserving multiplication asterisks", () => {
+    const input = "Use **TypeScript** and the expression a * b.";
     const result = cleanPromptFormatting(input);
-    expect(result).not.toContain("*");
-    expect(result).toContain("Use TypeScript with strict mode and full typing.");
+    expect(result).toBe("Use TypeScript and the expression a * b.");
   });
 
   it("converts bullet asterisks to clean hyphens", () => {
@@ -153,29 +145,9 @@ describe("cleanPromptFormatting", () => {
     expect(result).toContain("- Rule 1");
   });
 
-  it("strips raw JSON object wrappers and unescapes literal newlines", () => {
-    const rawJson = '{\n  "enhancedPrompt": "ROLE:\\nYou are a Principal Full-Stack Engineer.\\n\\nCONTEXT:\\nDeveloper building bot.",\n  "tips": ["Tip 1"]\n}';
-    const result = cleanPromptFormatting(rawJson);
-    expect(result).not.toContain('"enhancedPrompt"');
-    expect(result).not.toContain('{"');
-    expect(result).toContain("ROLE:\nYou are a Principal Full-Stack Engineer.");
-    expect(result).toContain("CONTEXT:\nDeveloper building bot.");
-  });
-
-  it("handles truncated raw JSON without trailing closing quotes", () => {
-    const truncated = '{\n  "enhancedPrompt": "ROLE:\\nYou are an expert.\\n\\nTASK:\\nBuild API';
-    const result = cleanPromptFormatting(truncated);
-    expect(result).not.toContain('"enhancedPrompt"');
-    expect(result).toContain("ROLE:\nYou are an expert.");
-    expect(result).toContain("TASK:\nBuild API");
-  });
-
-  it("removes stray hashes like Step #1 while preserving #include", () => {
-    const input = "Step #1: Initialize project\nStep #2: Add #include <iostream>\nIssue #99";
+  it("preserves hashes and operators outside heading lines", () => {
+    const input = "C#\n#include <iostream>\n#fff\na * b\nStep #1";
     const result = cleanPromptFormatting(input);
-    expect(result).toContain("Step 1: Initialize project");
-    expect(result).toContain("Step 2: Add #include <iostream>");
-    expect(result).toContain("Issue 99");
-    expect(result).not.toContain("Step #1");
+    expect(result).toBe(input);
   });
 });

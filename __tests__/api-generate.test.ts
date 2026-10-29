@@ -22,16 +22,19 @@ jest.mock("@google/genai", () => ({
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/generate/route";
 
+let requestCount = 1;
+
 // Ensure GEMINI_API_KEY is set for tests
 beforeAll(() => {
   process.env.GEMINI_API_KEY = "test-api-key-for-jest";
 });
 
 function makeRequest(body: Record<string, unknown>): NextRequest {
+  const ip = `192.0.2.${requestCount++}`;
   return new NextRequest("http://localhost:3000/api/generate", {
     method: "POST",
     body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "x-forwarded-for": ip },
   });
 }
 
@@ -149,7 +152,7 @@ describe("POST /api/generate", () => {
     expect(typeof metrics.roleDetected).toBe("boolean");
     expect(typeof metrics.constraintsDetected).toBe("boolean");
     expect(typeof metrics.outputFormatDetected).toBe("boolean");
-    expect(typeof metrics.savingsPercentage).toBe("number");
+    expect(typeof metrics.tokenDelta).toBe("number");
   });
 
   it("accepts all valid AI model IDs", async () => {

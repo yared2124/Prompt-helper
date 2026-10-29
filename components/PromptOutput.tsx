@@ -223,8 +223,13 @@ export default function PromptOutput({
     onShowToast("Reverted to previous prompt version.", "info");
   };
 
-  const expansionPercent = result
-    ? Math.round((result.tokensAfter / Math.max(result.tokensBefore, 1)) * 100)
+  const tokenDelta = result
+    ? result.metrics?.tokenDelta ??
+      Math.round(
+        ((result.tokensAfter - result.tokensBefore) /
+          Math.max(result.tokensBefore, 1)) *
+          100
+      )
     : 0;
 
   return (
@@ -236,7 +241,7 @@ export default function PromptOutput({
             <Check size={14} />
           </span>
           <div>
-            <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2 font-serif">
+            <h2 className="text-lg font-bold text-[#121E1B] dark:text-white flex items-center gap-2">
               Optimized Prompt Architecture
             </h2>
             <p className="text-xs text-[#717E7A] dark:text-slate-400">
@@ -324,10 +329,10 @@ export default function PromptOutput({
 
           <div className="p-3 rounded-xl bg-white dark:bg-emerald-950/30 border border-[#E7E2D8] dark:border-emerald-500/30 shadow-[0_2px_8px_-2px_rgba(20,30,25,0.03)]">
             <span className="text-[11px] text-[#C2671A] dark:text-emerald-400 uppercase font-semibold">
-              Structural Gain
+              Token change
             </span>
             <div className="text-base font-bold font-mono text-[#C2671A] dark:text-emerald-300 mt-0.5">
-              +{expansionPercent}% clarity
+              {tokenDelta > 0 ? "+" : ""}{tokenDelta}%
             </div>
           </div>
 

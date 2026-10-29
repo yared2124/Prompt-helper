@@ -20,7 +20,7 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
             title="promptHelper"
             aria-label="promptHelper"
           >
-            <span className="font-serif font-black text-sm sm:text-base text-[#E2BA70] dark:text-emerald-400 select-none leading-none">
+            <span className="font-black text-sm sm:text-base text-[#E2BA70] dark:text-emerald-400 select-none leading-none">
               P
             </span>
           </div>

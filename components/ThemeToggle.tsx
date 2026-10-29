@@ -4,24 +4,14 @@ import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light" | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setTheme(
+      document.documentElement.classList.contains("dark") ? "dark" : "light"
+    );
     setMounted(true);
-    const stored = localStorage.getItem("prompthelper_theme") as "dark" | "light" | null;
-    if (stored) {
-      setTheme(stored);
-      if (stored === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    } else {
-      // First-time visitors: default to dark mode
-      setTheme("dark");
-      document.documentElement.classList.add("dark");
-    }
   }, []);
 
   const toggleTheme = () => {
