@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { AIModel, Domain } from "@/types";
-import { Loader2, CornerDownLeft, Eraser, Zap } from "lucide-react";
+import { Loader2, CornerDownLeft, Eraser } from "lucide-react";
 import StrategySelector from "@/components/StrategySelector";
 
 interface PromptInputProps {
@@ -102,8 +102,8 @@ export default function PromptInput({
             <span className="hidden sm:inline text-[#C4CFCB] dark:text-slate-600">
               •
             </span>
-            <span className="hidden sm:inline flex items-center gap-1 font-mono text-[#44524E] dark:text-slate-300 font-medium">
-              <Zap size={11} className="text-amber-500 dark:text-amber-400" /> ~{estimatedTokens} input tokens
+            <span className="hidden sm:flex items-center gap-1 font-mono text-[#44524E] dark:text-slate-300 font-medium">
+              ~{estimatedTokens} input tokens
             </span>
           </div>
 
@@ -144,7 +144,6 @@ export default function PromptInput({
           </>
         ) : (
           <>
-            <Zap size={18} className="text-amber-400 dark:text-emerald-400" />
             <span>
               Generate Optimized Prompt
               {selectedAI ? ` for ${selectedAI.name}` : ""}

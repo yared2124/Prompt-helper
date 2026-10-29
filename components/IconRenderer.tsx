@@ -16,7 +16,6 @@ import {
   Scale,
   Target,
   Sliders,
-  Zap,
   ShieldCheck,
   BrainCircuit,
   Atom,
@@ -59,7 +58,6 @@ const ICON_MAP: Record<string, React.FC<LucideProps>> = {
 
   // Strategy icons
   Sliders,
-  Zap,
   ShieldCheck,
   BrainCircuit,
 

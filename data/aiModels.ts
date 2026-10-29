@@ -11,7 +11,7 @@ export const PROMPT_STRATEGIES: PromptStrategy[] = [
   {
     id: "tokensaver",
     name: "Token Saver",
-    iconName: "Zap",
+    iconName: "Scissors",
     description: "Maximum compression. Zero conversational filler, raw dense schema.",
     benefit: "Saves 30-50% tokens",
   },
@@ -66,7 +66,7 @@ export const AI_MODELS: AIModel[] = [
     id: "gemini",
     name: "Gemini",
     provider: "Google",
-    iconName: "Zap",
+    iconName: "Sparkles",
     color: "text-blue-500 dark:text-blue-400",
     borderColor: "border-blue-500/40",
     bgGlow: "shadow-blue-500/15",

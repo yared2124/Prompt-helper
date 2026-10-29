@@ -10,7 +10,6 @@ import {
   ExternalLink,
   Download,
   FileCode2,
-  Zap,
   Lightbulb,
   Play,
   Terminal,
@@ -336,7 +335,6 @@ export default function PromptOutput({
               Engine Grounding
             </span>
             <div className="text-base font-bold text-[#121E1B] dark:text-slate-200 mt-0.5 flex items-center gap-1">
-              <Zap size={13} className="text-amber-500" />
               <span>Zero Fluff</span>
             </div>
           </div>

@@ -17,7 +17,6 @@ import ToastContainer, { ToastMessage } from "@/components/Toast";
 import IconRenderer from "@/components/IconRenderer";
 import {
   AlertCircle,
-  Zap,
   ArrowDown,
   Terminal,
   Cpu,
@@ -212,7 +211,6 @@ export default function Home() {
           {/* Interactive 1-Click Demo Presets Bar */}
           <div className="pt-2 space-y-2.5">
             <div className="text-[11px] font-bold uppercase tracking-wider text-[#75827E] dark:text-slate-500 flex items-center justify-center gap-1.5">
-              <Zap size={13} className="text-amber-500" />
               <span>Try 1-Click Interactive Showcase Presets:</span>
             </div>
             <div className="flex items-center justify-center gap-2 flex-wrap max-w-2xl mx-auto">
