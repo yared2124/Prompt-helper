@@ -3,7 +3,7 @@ import { ArrowLeft, AlertCircle } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#FAF7F2] dark:bg-[#05060f] text-[#121E1B] dark:text-white text-center">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#FAF7F2] dark:bg-[#06110d] text-[#121E1B] dark:text-white text-center">
       <div className="w-16 h-16 rounded-2xl bg-[#121E1B] dark:bg-violet-600 text-white flex items-center justify-center mx-auto mb-6 shadow-xl shadow-black/10 dark:shadow-violet-500/30">
         <AlertCircle size={32} />
       </div>

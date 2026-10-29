@@ -102,7 +102,7 @@ export default function PromptLibrary({
       />
 
       {/* Drawer Container */}
-      <div className="relative ml-auto h-full w-full max-w-lg bg-[#FAF7F2] dark:bg-[#090b17] border-l border-[#E7E2D8] dark:border-white/10 shadow-2xl flex flex-col z-10 animate-slide-left">
+      <div className="relative ml-auto h-full w-full max-w-lg bg-[#FAF7F2] dark:bg-[#0b1712] border-l border-[#E7E2D8] dark:border-white/10 shadow-2xl flex flex-col z-10 animate-slide-left">
         {/* Header */}
         <div className="px-5 py-4 border-b border-[#E7E2D8] dark:border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2">

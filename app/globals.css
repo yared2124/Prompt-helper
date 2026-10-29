@@ -12,12 +12,12 @@
 }
 
 .dark {
-  --bg: #0c0c0e;
-  --surface: #131316;
-  --border: #27272a;
-  --text: #fafafa;
-  --text-muted: #a1a1aa;
-  --accent: #60a5fa;
+  --bg: #06110d;
+  --surface: #0b1712;
+  --border: #1a2a22;
+  --text: #f2f7f4;
+  --text-muted: #a0b0a7;
+  --accent: #86c99b;
 }
 
 * { box-sizing: border-box; }
