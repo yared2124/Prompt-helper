@@ -10,7 +10,7 @@ interface HeaderProps {
 
 export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-40 bg-[#FAF7F2]/90 dark:bg-[#06110d]/90 border-b border-[#E7E2D8] dark:border-white/8 backdrop-blur-md transition-colors">
+    <header className="sticky top-0 z-40 bg-[#FAF7F2]/90 dark:bg-[#05060f]/90 border-b border-[#E7E2D8] dark:border-white/8 backdrop-blur-md transition-colors">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         {/* Brand and Subtitle */}
         <div className="flex items-center gap-2.5 sm:gap-3">
@@ -20,7 +20,7 @@ export default function Header({ savedCount, onOpenLibrary }: HeaderProps) {
             title="promptHelper"
             aria-label="promptHelper"
           >
-            <span className="font-black text-sm sm:text-base text-[#E2BA70] dark:text-emerald-400 select-none leading-none">
+            <span className="font-serif font-black text-sm sm:text-base text-[#E2BA70] dark:text-emerald-400 select-none leading-none">
               P
             </span>
           </div>

@@ -18,8 +18,6 @@ jest.mock("@google/genai", () => ({
 import { NextRequest } from "next/server";
 import { POST } from "@/app/api/refine/route";
 
-let requestCount = 1;
-
 beforeAll(() => {
   process.env.GEMINI_API_KEY = "test-api-key-for-jest";
 });
@@ -39,11 +37,10 @@ beforeEach(() => {
 });
 
 function makeRequest(body: Record<string, unknown>): NextRequest {
-  const ip = `198.51.100.${requestCount++}`;
   return new NextRequest("http://localhost:3000/api/refine", {
     method: "POST",
     body: JSON.stringify(body),
-    headers: { "Content-Type": "application/json", "x-forwarded-for": ip },
+    headers: { "Content-Type": "application/json" },
   });
 }
 

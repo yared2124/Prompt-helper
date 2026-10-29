@@ -90,9 +90,9 @@ describe("TypeScript interfaces - structural checks", () => {
       roleDetected: true,
       constraintsDetected: false,
       outputFormatDetected: true,
-      tokenDelta: 42,
+      savingsPercentage: 42,
     };
-    expect(metrics.tokenDelta).toBe(42);
+    expect(metrics.savingsPercentage).toBe(42);
   });
 
   it("GeneratedPrompt has required id and savedAt", () => {

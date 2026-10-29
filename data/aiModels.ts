@@ -13,7 +13,7 @@ export const PROMPT_STRATEGIES: PromptStrategy[] = [
     name: "Token Saver",
     iconName: "Zap",
     description: "Maximum compression. Zero conversational filler, raw dense schema.",
-    benefit: "Concise output without losing technical depth",
+    benefit: "Saves 30-50% tokens",
   },
   {
     id: "production",

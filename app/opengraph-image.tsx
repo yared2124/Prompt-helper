@@ -26,6 +26,20 @@ export default async function Image() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <div
+            style={{
+              width: "48px",
+              height: "48px",
+              borderRadius: "14px",
+              background: "linear-gradient(135deg, #8b5cf6, #3b82f6)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "24px",
+            }}
+          >
+            ✨
+          </div>
           <span style={{ fontSize: "28px", fontWeight: "bold", letterSpacing: "-0.5px" }}>
             promptHelper
           </span>
@@ -59,6 +73,17 @@ export default async function Image() {
           >
             Architect prompts under real constraints.
           </h1>
+          <p
+            style={{
+              fontSize: "22px",
+              color: "#94a3b8",
+              margin: 0,
+              maxWidth: "850px",
+              lineHeight: 1.4,
+            }}
+          >
+            Zero fluff, model-tailored schemas for Claude, ChatGPT, Gemini, and DeepSeek. Built with Next.js 14 and Gemini 3.7 Flash.
+          </p>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
@@ -99,7 +124,7 @@ export default async function Image() {
               fontWeight: 600,
             }}
           >
-            Token change
+            Saves 30-50% Tokens
           </div>
         </div>
       </div>

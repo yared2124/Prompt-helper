@@ -20,7 +20,7 @@ export default function Error({
       <div className="w-14 h-14 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-rose-500/10">
         <AlertTriangle size={28} />
       </div>
-      <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+      <h1 className="text-2xl sm:text-3xl font-serif font-bold mb-2">
         Something went wrong
       </h1>
       <p className="text-xs sm:text-sm text-[#55635F] dark:text-slate-400 max-w-md mx-auto mb-6 leading-relaxed">
