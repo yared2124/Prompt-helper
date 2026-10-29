@@ -178,6 +178,4 @@ npm test
 
 Released under the [MIT License](LICENSE).
 
-## Author
-
-Built by [@Techyada21](https://t.me/Techyada21).
+© 2026 prompt Helper. All rights reserved.

@@ -327,77 +327,10 @@ export default function Home() {
           </section>
         )}
 
-        {/* Value Proposition Grid (Why It Matters) */}
-        {!result && !isLoading && (
-          <section className="py-6 space-y-5">
-            <h3 className="text-center text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-              The Architecture Behind Prompt Engineering
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {[
-                {
-                  iconName: "Target",
-                  title: "Model-Specific Idioms",
-                  desc: "Claude responds with supreme precision to XML tags; ChatGPT excels with Markdown headers; DeepSeek thrives on Chain-of-Thought directives.",
-                  lightIconBg: "bg-amber-50 border-amber-200/60 text-amber-700",
-                  darkIconBg: "dark:bg-amber-500/15 dark:border-amber-500/30 dark:text-amber-400 dark:shadow-[0_0_14px_rgba(245,158,11,0.2)]",
-                  cardGlow: "hover:border-amber-400/40 dark:hover:border-amber-500/30 dark:hover:shadow-[0_0_20px_rgba(245,158,11,0.08)]",
-                },
-                {
-                  iconName: "Zap",
-                  title: "Token Compression",
-                  desc: "Removes polite conversational filler, duplicate context, and ambiguity. Saves hundreds of tokens across multi-turn agent workflows.",
-                  lightIconBg: "bg-emerald-50 border-emerald-200/60 text-emerald-700",
-                  darkIconBg: "dark:bg-emerald-500/15 dark:border-emerald-500/30 dark:text-emerald-400 dark:shadow-[0_0_14px_rgba(16,185,129,0.2)]",
-                  cardGlow: "hover:border-emerald-400/40 dark:hover:border-emerald-500/30 dark:hover:shadow-[0_0_20px_rgba(16,185,129,0.08)]",
-                },
-                {
-                  iconName: "ShieldCheck",
-                  title: "Deterministic Schemas",
-                  desc: "Enforces strict output formatting, typing, edge cases, and constraints to prevent hallucination in production environments.",
-                  lightIconBg: "bg-sky-50 border-sky-200/60 text-sky-700",
-                  darkIconBg: "dark:bg-cyan-500/15 dark:border-cyan-500/30 dark:text-cyan-400 dark:shadow-[0_0_14px_rgba(6,182,212,0.2)]",
-                  cardGlow: "hover:border-cyan-400/40 dark:hover:border-cyan-500/30 dark:hover:shadow-[0_0_20px_rgba(6,182,212,0.08)]",
-                },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  className={`p-5 rounded-2xl glass-card border border-[#E7E2D8] dark:border-white/5 space-y-2.5 transition-all duration-200 hover:-translate-y-0.5 ${item.cardGlow}`}
-                >
-                  <div
-                    className={`w-10 h-10 rounded-xl border flex items-center justify-center shadow-sm transition-all ${item.lightIconBg} ${item.darkIconBg}`}
-                  >
-                    <IconRenderer name={item.iconName} size={20} />
-                  </div>
-                  <h4 className="font-bold text-sm text-[#121E1B] dark:text-white font-serif">
-                    {item.title}
-                  </h4>
-                  <p className="text-xs text-[#55635F] dark:text-slate-400 leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
         {/* Footer */}
         <footer className="text-center py-8 border-t border-slate-200 dark:border-white/10">
           <p className="text-xs text-[#121E1B] dark:text-slate-400">
-            prompt Helper  built by{" "}
-            <a
-              href="https://t.me/Techyada21"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bold text-black dark:text-emerald-400 hover:underline hover:text-[#1A5343] dark:hover:text-emerald-300 transition-colors"
-              title="Visit @Techyada21 on Telegram"
-            >
-              @Techyada21
-            </a>{" "}
-            · Built with{" "}
-            <span className="font-semibold text-black dark:text-slate-200">
-              Next.js, TypeScript & Tailwind CSS
-            </span>
+            © 2026 prompt Helper. All rights reserved.
           </p>
         </footer>
       </main>
