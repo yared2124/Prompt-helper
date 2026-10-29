@@ -1,136 +1,183 @@
-# promptHelper — AI-Native Prompt Architect
+# promptHelper
 
-<p align="center">
-  <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-14.2-black?logo=next.js" alt="Next.js"></a>
-  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript" alt="TypeScript"></a>
-  <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css" alt="Tailwind CSS"></a>
-  <a href="https://ai.google.dev/"><img src="https://img.shields.io/badge/Powered%20By-Gemini%202.5%20Flash-4285F4?logo=google" alt="Gemini"></a>
-  <a href="https://jestjs.io/"><img src="https://img.shields.io/badge/Tests-79%20Passed-brightgreen?logo=jest" alt="Jest Tests"></a>
-</p>
+Turn a rough request into a structured, model-specific prompt, then refine it and test it before you use it.
 
-<p align="center">
-  <strong>Stop wasting tokens with casual, ambiguous prompts.</strong><br>
-  Tell <em>promptHelper</em> what you want in plain words — we transform it into an optimized, model-specific prompt tailored for Claude, ChatGPT, Gemini, DeepSeek, and more.
-</p>
+[Live demo](https://prompt-helper.vercel.app) · [Report an issue](https://github.com/yared2124/Prompt-helper/issues)
 
 ---
 
-## Why promptHelper?
+## Overview
 
-Different foundation models adhere to fundamentally different prompting idioms:
-- **Claude** adheres with extreme fidelity to semantic XML structures (`<context>`, `<instructions>`, `<requirements>`).
-- **ChatGPT / OpenAI** thrives on Markdown headings, role definitions, and strict JSON schemas.
-- **DeepSeek** excels when rigorous chain-of-thought and mathematical/algorithmic logic are enforced.
-- **Gemini** leverages multi-turn contextual reasoning, data tables, and structured guidelines.
+Prompts that work well on one model often work poorly on another. Claude responds well to XML-tagged sections, ChatGPT to labelled headings, and DeepSeek to explicit reasoning steps. promptHelper takes a plain-language goal and rewrites it into a prompt shaped for the model you choose.
 
-**promptHelper bridges this gap automatically.**
+You pick a target model, a domain, and an optimization strategy. The app generates the prompt, lets you refine it, and lets you run it against a live model so you can compare it with your original wording.
 
----
+## Features
 
-## Key Features
+- **10 target models.** Claude, ChatGPT, Gemini, DeepSeek, Grok, Mistral, LLaMA, Perplexity, Cohere and Qwen, each with its own prompt structure.
+- **12 domains.** Coding, education, creative writing, research, business, art and design, data, AI and automation, health, language, legal and finance, and productivity.
+- **4 strategies.** Standard Smart, Token Saver, Production Strict and Deep Reasoning.
+- **AI refinement.** One-click adjustments (make more concise, add edge cases, add examples, beginner friendly, strict schema only, deep reasoning) or your own instruction, with undo.
+- **Live sandbox.** Run the generated prompt and compare its output with the output of your original request.
+- **Analysis.** Estimated token counts before and after, and checks for a role, constraints and an output format.
+- **Local library.** Save prompts in your browser, then import or export them as JSON. Nothing is stored on a server.
+- **Export and launch.** Copy the prompt, download it as Markdown or JSON, or copy it and open the target model's website.
+- **Light and dark themes.** The choice is saved in your browser.
 
-- 🎯 **10 AI Foundation Models**: Claude 3.7 Sonnet, ChatGPT (GPT-4o), Gemini 3.7 Flash, DeepSeek-R1, Grok-2, Mistral Large, LLaMA 3.3, Perplexity, Cohere Command R+, and Qwen 2.5.
-- 📂 **12 Specialized Domains**: Coding & Dev, Education, Creative Writing, Research & Analysis, Business, Art & Design, Data & Analytics, AI & Automation, Health, Language, Legal, and Productivity.
-- 🧠 **4 Prompting Strategies**:
-  - **Standard Smart**: Balanced clarity, role definition, and output formatting.
-  - **Token Saver**: Concision without losing technical depth.
-  - **Production Strict**: Strict types, edge-case handling, error states, and unit test requirements.
-  - **Deep Reasoning**: Chain-of-thought analysis, step-by-step logic, and self-verification.
-- 📊 **Real-time Prompt Analytics**: Token counts before and after, token change, and automated detection of roles, constraints, and output schemas.
-- 💾 **Local Prompt Library**: Save, organize, export (JSON), and copy generated prompts directly in your browser with zero server database overhead.
-- 🎨 **Adaptive Design System**: Dark/Light mode with neutral model styling and full mobile responsiveness.
-- 🛡️ **Production-Hardened**: Security headers, non-printable character sanitization, 25s timeouts, multi-model fallback chain, and custom error boundaries.
+## Tech stack
 
----
+| Area | Technology |
+| --- | --- |
+| Framework | Next.js 14 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| AI | Google Gemini via `@google/genai` |
+| Icons | lucide-react |
+| Testing | Jest and React Testing Library |
+| Hosting and analytics | Vercel, Vercel Analytics, Speed Insights |
 
-## Testing & Reliability
+## Getting started
 
-The project features an automated testing suite built with **Jest** and **React Testing Library**:
+### Requirements
 
-- **79 Unit & Integration Tests (100% Pass Rate)**
-- Pure utility tests (`estimateTokens`, `sanitizeInput`, `withTimeout`)
-- Schema & data integrity validation for all models, domains, and strategies
-- React component UI and accessibility testing
-- API route verification with simulated Gemini client responses
+- Node.js 18.17 or later
+- A Gemini API key from [Google AI Studio](https://aistudio.google.com/)
+
+### Installation
+
+```bash
+git clone https://github.com/yared2124/Prompt-helper.git
+cd Prompt-helper
+npm install
+```
+
+### Configuration
+
+Create a `.env.local` file in the project root:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+The key is read only on the server, in the API routes. Never prefix it with `NEXT_PUBLIC_`.
+
+### Run
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run the test suite |
+| `npm run test:coverage` | Run tests with a coverage report |
+
+## Project structure
+
+```
+app/
+  api/
+    generate/      Build a prompt from a request
+    refine/        Apply a refinement instruction to a prompt
+    test-prompt/   Run a prompt against the model (sandbox)
+  layout.tsx       Root layout, fonts, metadata, theme script
+  page.tsx         Main application page
+components/        UI components (selectors, input, output, library)
+data/              Model, domain, strategy and refinement definitions
+hooks/             usePromptGenerator, useLibrary
+lib/               cleanPrompt (output formatting), rateLimit
+types/             Shared TypeScript types
+__tests__/         Jest test suites
+```
+
+## API
+
+All routes accept `POST` with a JSON body and return JSON. Errors have the shape `{ "error": "message" }`.
+
+### `POST /api/generate`
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `userInput` | string | Required, 3 to 2,000 characters |
+| `aiModelId` | string | Required, for example `claude` |
+| `domainId` | string | Required, for example `coding` |
+| `strategyId` | string | Optional, defaults to the standard strategy |
+| `targetModel` | string | Optional specific model variant |
+
+Returns `enhancedPrompt`, `tips`, token estimates and analysis metrics.
+
+### `POST /api/refine`
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `currentPrompt` | string | Required, up to 12,000 characters |
+| `refinementInstruction` | string | Required, up to 1,000 characters |
+| `aiModelId`, `domainId` | string | Optional context |
+
+### `POST /api/test-prompt`
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `prompt` | string | Required, up to 6,000 characters |
+| `originalInput` | string | Optional, up to 2,000 characters |
+| `compareOriginal` | boolean | Also run the original request for comparison |
+
+### Rate limits
+
+Requests are limited per client IP: 10 per minute on `generate` and `refine`, and 5 per minute on `test-prompt`. Over the limit, the API returns `429` with a `Retry-After` header. The limiter is in memory, so for a public deployment also add a rate-limit rule in your host's firewall.
+
+## Testing
 
 ```bash
 npm test
 ```
 
----
+The suite covers utility functions, data integrity for models, domains and strategies, the prompt-formatting logic, the rate limiter, UI components, and the API routes using a mocked Gemini client.
 
-## Tech Stack
+## Deployment
 
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **AI Engine**: [Google Gemini 2.5 Flash API](https://ai.google.dev/) by default (`@google/genai`)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Testing**: [Jest](https://jestjs.io/) & [React Testing Library](https://testing-library.com/)
+The project is set up for [Vercel](https://vercel.com/).
 
----
+1. Import the repository.
+2. Add `GEMINI_API_KEY` under Environment Variables.
+3. Deploy.
 
-## Project Structure
+## Security notes
 
-```
-Prompt-helper/
-├── __tests__/                  ← Jest & RTL test suites (79 tests)
-│   ├── api-generate.test.ts
-│   ├── components.test.tsx
-│   ├── data.test.ts
-│   ├── setup.ts
-│   ├── types.test.ts
-│   └── utils.test.ts
-├── app/
-│   ├── api/generate/route.ts   ← Gemini API endpoint with fallback chain
-│   ├── error.tsx               ← Client-side error boundary
-│   ├── loading.tsx             ← Hydration skeleton
-│   ├── not-found.tsx           ← Branded 404 page
-│   ├── opengraph-image.tsx     ← Edge-rendered dynamic OG image
-│   ├── robots.ts               ← SEO robots exclusion
-│   ├── sitemap.ts              ← Dynamic sitemap
-│   ├── layout.tsx              ← Root layout with IBM Plex Sans and Mono
-│   └── page.tsx                ← Interactive application page
-├── components/                 ← Reusable UI components
-├── data/                       ← Models & domain data configurations
-├── hooks/                      ← Custom React hooks (library & generator)
-├── types/                      ← TypeScript interfaces
-└── jest.config.ts              ← Jest testing configuration
-```
+- The Gemini key stays on the server and is never sent to the browser.
+- Inputs are length-limited and stripped of control characters.
+- Responses include `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy` and `Permissions-Policy` headers.
+- Saved prompts live only in your browser's local storage.
+- Prompts you generate or test are sent to Google's Gemini API, so don't enter secrets or confidential data.
 
----
+## Known limitations
 
-## Quick Start
+- Token counts are estimates (about 4 characters per token), not exact tokenizer results.
+- Generated prompts are often longer than the original request. The goal is clarity and structure, not shorter text.
+- The sandbox runs prompts on Gemini, so its output shows how a prompt performs there, not on every target model.
+- Output quality depends on the model and can vary between runs, so review a prompt before relying on it.
 
-### 1. Clone the repository
+## Contributing
+
+Issues and pull requests are welcome. Before opening a pull request, please run:
+
 ```bash
-git clone https://github.com/yared2124/Prompt-helper.git
-cd Prompt-helper
+npm run lint
+npm test
 ```
-
-### 2. Install dependencies
-```bash
-npm install
-```
-
-### 3. Set up environment variables
-Create a `.env.local` file in the root directory:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
-# Optional: set a verified fallback model
-GEMINI_FALLBACK_MODEL=your_verified_fallback_model
-```
-> Get a free API key at [Google AI Studio](https://aistudio.google.com/).
-
-### 4. Run the development server
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
 
 ## License
 
-This project is open-source and available under the [MIT License](LICENSE).
+Released under the [MIT License](LICENSE).
+
+## Author
+
+Built by [@Techyada21](https://t.me/Techyada21).
