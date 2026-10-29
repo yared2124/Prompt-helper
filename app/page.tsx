@@ -198,7 +198,7 @@ export default function Home() {
 
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif font-bold tracking-tight text-[#121E1B] dark:text-white leading-[1.12]">
             Architect prompts <br className="hidden sm:inline" />
-            <span className="italic font-normal font-serif">under</span>{" "}
+            <span className="font-normal font-serif">under</span>{" "}
             <span className="text-[#1A5343] dark:gradient-text">real constraints.</span>
           </h1>
 
