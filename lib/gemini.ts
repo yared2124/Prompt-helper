@@ -6,9 +6,9 @@ export function getAIClient() {
 }
 
 export const MODELS = [
-  process.env.GEMINI_MODEL ?? "gemini-2.5-flash",
-  process.env.GEMINI_FALLBACK_MODEL,
-].filter(Boolean) as string[];
+  process.env.GEMINI_MODEL || "gemini-3.8-flash",
+  process.env.GEMINI_FALLBACK_MODEL || "gemini-3.8-flash",
+].filter((model, index, models) => models.indexOf(model) === index);
 
 export const estimateTokens = (t: string) => Math.max(1, Math.ceil(t.length / 4));
 
