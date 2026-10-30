@@ -1,36 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
 import { GenerateRequest, GenerateResponse } from "@/types";
 import { AI_MODELS, PROMPT_STRATEGIES } from "@/data/aiModels";
 import { DOMAINS } from "@/data/domains";
 import { cleanPromptFormatting } from "@/lib/cleanPrompt";
-
-// Lazy init — only runs at request time, not during build
-function getAIClient() {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not set in .env.local");
-  }
-  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-}
-
-function estimateTokens(text: string): number {
-  // Standard token estimate (~4 chars per token)
-  return Math.max(1, Math.ceil(text.length / 4));
-}
-
-function sanitizeInput(text: string): string {
-  // Remove dangerous non-printable ASCII control characters except tab and newline
-  return text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
-}
-
-function withTimeout<T>(promise: Promise<T>, ms = 25000): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error(`Generation timed out after ${ms / 1000}s`)), ms)
-    ),
-  ]);
-}
+import {
+  loadBalancedGenerate,
+  estimateTokens,
+  sanitizeInput,
+} from "@/lib/loadBalancer";
 
 function parseGeneratedOutput(
   rawText: string,
@@ -131,6 +108,8 @@ const MODEL_SPECIFIC_INSTRUCTIONS: Record<string, string> = {
 };
 
 export async function POST(request: NextRequest) {
+  const startTime = performance.now();
+
   try {
     const body: GenerateRequest = await request.json();
     const { userInput, aiModelId, domainId, strategyId, targetModel } = body;
@@ -228,63 +207,33 @@ Respond with a JSON object in this exact schema:
   ]
 }`;
 
-    const ai = getAIClient();
-    const candidateModels = [
-      "gemini-3.7-flash",
-      "gemini-3.6-flash",
-      "gemini-3.8-flash",
-      "gemini-3.5-flash",
-      "gemini-3.5-flash-lite",
-      "gemini-3-flash-preview",
-    ];
-    let rawText = "";
-    let lastErr: unknown = null;
-
-    for (const modelName of candidateModels) {
-      try {
-        const response = await withTimeout(
-          ai.models.generateContent({
-            model: modelName,
-            contents: metaPrompt,
-            config: {
-              temperature: 0.7,
-              maxOutputTokens: 4096,
-              responseMimeType: "application/json",
-              responseJsonSchema: {
-                type: "OBJECT",
-                properties: {
-                  enhancedPrompt: {
-                    type: "STRING",
-                    description:
-                      "The complete engineered prompt ready to paste directly into the target AI model.",
-                  },
-                  tips: {
-                    type: "ARRAY",
-                    items: {
-                      type: "STRING",
-                    },
-                    description:
-                      "3 actionable tips for maximizing output quality with this model.",
-                  },
-                },
-                required: ["enhancedPrompt", "tips"],
-              },
+    // ⚡ Use load-balanced parallel racing instead of sequential fallback
+    const raceResult = await loadBalancedGenerate(metaPrompt, {
+      temperature: 0.7,
+      maxOutputTokens: 4096,
+      responseMimeType: "application/json",
+      responseJsonSchema: {
+        type: "OBJECT",
+        properties: {
+          enhancedPrompt: {
+            type: "STRING",
+            description:
+              "The complete engineered prompt ready to paste directly into the target AI model.",
+          },
+          tips: {
+            type: "ARRAY",
+            items: {
+              type: "STRING",
             },
-          }),
-          25000
-        );
-        rawText = response.text ?? "";
-        if (rawText) break; // success
-      } catch (err) {
-        lastErr = err;
-        const errMsg = err instanceof Error ? err.message : String(err);
-        console.warn(`Model ${modelName} encountered issue: ${errMsg}. Trying fallback...`);
-      }
-    }
+            description:
+              "3 actionable tips for maximizing output quality with this model.",
+          },
+        },
+        required: ["enhancedPrompt", "tips"],
+      },
+    });
 
-    if (!rawText && lastErr) {
-      throw lastErr;
-    }
+    const rawText = raceResult.text;
 
     // Resiliently parse and sanitize output
     const parsed = parseGeneratedOutput(rawText, selectedAI.name);
@@ -293,6 +242,8 @@ Respond with a JSON object in this exact schema:
 
     const tokensBefore = estimateTokens(userInput);
     const tokensAfter = estimateTokens(cleanedPrompt);
+
+    const totalLatencyMs = Math.round(performance.now() - startTime);
 
     const result: GenerateResponse = {
       enhancedPrompt: cleanedPrompt,
@@ -316,7 +267,12 @@ Respond with a JSON object in this exact schema:
       },
     };
 
-    return NextResponse.json(result);
+    // Add performance headers
+    const response = NextResponse.json(result);
+    response.headers.set("X-Response-Time", `${totalLatencyMs}ms`);
+    response.headers.set("X-Model-Used", raceResult.model);
+    response.headers.set("Cache-Control", "private, max-age=300");
+    return response;
   } catch (error) {
     let message = error instanceof Error ? error.message : String(error);
     try {

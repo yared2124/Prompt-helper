@@ -1,65 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
 import { TestPromptRequest, TestPromptResponse } from "@/types";
-
-function getAIClient() {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not set in .env.local");
-  }
-  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-}
-
-function estimateTokens(text: string): number {
-  return Math.max(1, Math.ceil(text.length / 4));
-}
-
-function withTimeout<T>(promise: Promise<T>, ms = 25000): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error(`Execution timed out after ${ms / 1000}s`)), ms)
-    ),
-  ]);
-}
-
-const CANDIDATE_MODELS = [
-  "gemini-3.7-flash",
-  "gemini-3.6-flash",
-  "gemini-3.8-flash",
-  "gemini-3.5-flash",
-  "gemini-3.5-flash-lite",
-  "gemini-3-flash-preview",
-];
+import { loadBalancedGenerate, estimateTokens } from "@/lib/loadBalancer";
 
 async function executePrompt(promptText: string): Promise<string> {
-  const ai = getAIClient();
-  let lastErr: unknown = null;
-
-  for (const modelName of CANDIDATE_MODELS) {
-    try {
-      const response = await withTimeout(
-        ai.models.generateContent({
-          model: modelName,
-          contents: promptText,
-          config: {
-            temperature: 0.7,
-            maxOutputTokens: 3000,
-          },
-        }),
-        25000
-      );
-
-      const text = response.text?.trim();
-      if (text) return text;
-    } catch (err) {
-      lastErr = err;
-      const errMsg = err instanceof Error ? err.message : String(err);
-      console.warn(`Sandbox model ${modelName} issue: ${errMsg}. Trying fallback...`);
-    }
-  }
-
-  if (lastErr) throw lastErr;
-  return "No response generated.";
+  const result = await loadBalancedGenerate(promptText, {
+    temperature: 0.7,
+    maxOutputTokens: 3000,
+  });
+  return result.text;
 }
 
 export async function POST(request: NextRequest) {
@@ -114,7 +62,10 @@ export async function POST(request: NextRequest) {
       tokensUsed,
     };
 
-    return NextResponse.json(result);
+    const response = NextResponse.json(result);
+    response.headers.set("X-Response-Time", `${executionTimeMs}ms`);
+    response.headers.set("Cache-Control", "private, max-age=300");
+    return response;
   } catch (error) {
     let message = error instanceof Error ? error.message : String(error);
     try {
